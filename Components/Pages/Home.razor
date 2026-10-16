@@ -5,7 +5,7 @@
 
 <section class="home-hero" aria-labelledby="home-title">
     <div class="hero-copy">
-        <h1 id="home-title">Stay a while.<br />Discover <span>more.</span></h1>
+        <h1 id="home-title">A good place to<br /><span>stay awhile.</span></h1>
         <p>Make room for a slower morning, a walk somewhere new, and time together. Find your stay at Amara, then explore what lies beyond it.</p>
         <div class="hero-actions">
             <MudButton Href="rooms" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" DropShadow="false" EndIcon="@Icons.Material.Filled.ArrowForward">Explore rooms</MudButton>
@@ -13,7 +13,7 @@
         </div>
         <div class="hero-note">
             <MudIcon Icon="@Icons.Material.Outlined.WbSunny" Size="Size.Small" />
-            <span>Space to settle in. Reasons to step outside.</span>
+            <span>@Daypart — explore rooms, cultural walks, nature trails, and guided adventures.</span>
         </div>
     </div>
     <figure class="hero-image">
@@ -30,13 +30,22 @@
         <div class="filter-field"><label for="home-guests">Guests</label><InputNumber id="home-guests" @bind-Value="_search.Guests" min="1" max="6" /><ValidationMessage For="() => _search.Guests" /></div>
         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" DropShadow="false">Find rooms</MudButton>
     </EditForm>
+    <p class="home-search-live" aria-live="polite">@StaySummary</p>
 </section>
 <section class="home-featured" aria-labelledby="featured-rooms-title">
     <div class="section-heading"><div><h2 id="featured-rooms-title">Find room to settle in.</h2><p>Find a space that feels right for your stay.</p></div><a class="text-link" href="rooms">All rooms <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Size="Size.Small" /></a></div>
-    <div class="home-featured-grid">
+
+    <div class="home-featured-pair">
         @foreach (var room in Booking.Rooms.Take(2))
         {
-            <article class="home-featured-card"><img src="@room.ImagePath" alt="@room.ImageAlt" width="960" height="640" loading="lazy" /><div><h3>@room.Name</h3><p>@room.Description</p><span>@BookingState.Money(room.NightlyRate) per night · Up to @room.Capacity guests</span></div></article>
+            <article class="home-featured-room">
+                <img src="@room.ImagePath" alt="@room.ImageAlt" width="960" height="640" loading="lazy" />
+                <div class="home-featured-room-body">
+                    <h3>@room.Name</h3>
+                    <p>@room.Description</p>
+                    <p class="home-featured-room-meta"><span class="price">@BookingState.Money(room.NightlyRate)</span> per night · Up to @room.Capacity guests</p>
+                </div>
+            </article>
         }
     </div>
 </section>
@@ -53,5 +62,9 @@
     private RoomSearch _search = new();
     private string TodayIso => DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd");
     private string CheckOutMinimum => (_search.CheckIn < DateOnly.MaxValue ? _search.CheckIn.AddDays(1) : _search.CheckIn).ToString("yyyy-MM-dd");
+    private string Daypart => DateTime.Now.Hour < 12 ? "Good morning" : DateTime.Now.Hour < 18 ? "Good afternoon" : "Good evening";
+    private string StaySummary => _search.Nights <= 0
+        ? "Choose dates — check-out comes after check-in, then dates carry into Rooms."
+        : $"{_search.Nights} night{(_search.Nights == 1 ? string.Empty : "s")} · {_search.Guests} guest{(_search.Guests == 1 ? string.Empty : "s")} — dates carry into Rooms.";
     private void FindRooms() => Navigation.NavigateTo($"rooms?checkIn={_search.CheckIn:yyyy-MM-dd}&checkOut={_search.CheckOut:yyyy-MM-dd}&guests={_search.Guests}");
 }

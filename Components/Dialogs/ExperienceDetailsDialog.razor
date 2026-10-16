@@ -1,13 +1,38 @@
 <MudDialog>
     <DialogContent>
-        <p class="experience-dialog-meta">@Experience.Category · @Experience.Duration</p>
-        <p class="room-detail-description">@Experience.Description</p>
-        <h3 class="detail-subheading">Your itinerary</h3>
-        <ol class="experience-itinerary">@foreach (var step in Experience.Itinerary) { <li>@step</li> }</ol>
-        <h3 class="detail-subheading">Included</h3>
-        <ul class="detail-amenities">@foreach (var item in Experience.Inclusions) { <li>@item</li> }</ul>
-        <h3 class="detail-subheading">Before you go</h3>
-        <p>@Experience.Preparation</p>
+        <div class="experience-detail">
+            <div class="experience-detail-intro">
+                <div class="experience-detail-icon" aria-hidden="true">
+                    <MudIcon Icon="@Experience.Icon" Size="Size.Large" />
+                </div>
+                <div>
+                    <p class="experience-dialog-meta">@Experience.Category · @Experience.Duration</p>
+                    <p class="experience-detail-description">@Experience.Description</p>
+                </div>
+            </div>
+            <section class="experience-detail-section" aria-labelledby="experience-itinerary-heading">
+                <h3 id="experience-itinerary-heading">Your itinerary</h3>
+                <ol class="experience-itinerary">
+                    @foreach (var step in Experience.Itinerary)
+                    {
+                        <li>@step</li>
+                    }
+                </ol>
+            </section>
+            <section class="experience-detail-section" aria-labelledby="experience-included-heading">
+                <h3 id="experience-included-heading">Included</h3>
+                <ul class="experience-inclusions">
+                    @foreach (var item in Experience.Inclusions)
+                    {
+                        <li>@item</li>
+                    }
+                </ul>
+            </section>
+            <section class="experience-detail-section" aria-labelledby="experience-preparation-heading">
+                <h3 id="experience-preparation-heading">Before you go</h3>
+                <p class="experience-preparation">@Experience.Preparation</p>
+            </section>
+        </div>
     </DialogContent>
     <DialogActions><MudButton OnClick="() => Dialog.Cancel()">Close</MudButton></DialogActions>
 </MudDialog>

@@ -8,8 +8,8 @@ public static class AmaraTheme
     {
         PaletteLight = new PaletteLight
         {
-            Primary = "#d97757",
-            PrimaryContrastText = "#141413",
+            Primary = "#a8462d",
+            PrimaryContrastText = "#ffffff",
             Secondary = "#788c5d",
             SecondaryContrastText = "#141413",
             Background = "#faf9f5",

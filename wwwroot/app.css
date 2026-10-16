@@ -1,7 +1,7 @@
 @font-face { font-family: Poppins; src: url('fonts/Poppins-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: Poppins; src: url('fonts/Poppins-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: Lora; src: url('fonts/Lora-Variable.ttf') format('truetype'); font-weight: 400 700; font-style: normal; font-display: swap; }
-:root { --paper: #faf9f5; --ink: #141413; --muted: #56564e; --line: #e8e6dc; --accent: #d97757; --heading: 'Poppins', Arial, sans-serif; --body: 'Lora', Georgia, serif; }
+:root { --paper: #faf9f5; --ink: #141413; --muted: #56564e; --line: #e8e6dc; --accent: #d97757; --action: #a8462d; --action-hover: #8f3925; --action-foreground: #ffffff; --heading: 'Poppins', Arial, sans-serif; --body: 'Lora', Georgia, serif; }
 * { box-sizing: border-box; }
 html { min-width: 320px; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 1rem; line-height: 1.7; }
@@ -22,20 +22,20 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 .site-navigation { display: flex; align-items: center; gap: 30px; font-size: .82rem; }
 .site-navigation > a { text-decoration: none; padding-block: 12px; border-bottom: 2px solid transparent; }
 .site-navigation > a:hover, .site-navigation > a.active { border-bottom-color: var(--accent); }
-.site-navigation .nav-book { display: inline-flex; gap: 14px; align-items: center; padding: 13px 20px; background: var(--accent); border-radius: 8px; color: var(--ink); }
-.site-navigation .nav-book:hover { background: #cc6b4c; }
+.site-navigation .nav-book { display: inline-flex; gap: 14px; align-items: center; padding: 13px 20px; background: var(--action); border-radius: 8px; color: var(--action-foreground); }
+.site-navigation .nav-book:hover { background: var(--action-hover); }
 .menu-toggle { display: none; }
 main { flex: 1; padding-block: 48px 72px; }
 main:focus { outline: none; }
 .home-hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
 .hero-copy { padding-block: 32px; }
 .hero-copy h1 { font-size: clamp(2.8rem, 4.4vw, 4.6rem); font-weight: 400; line-height: 1.15; letter-spacing: -.04em; }
-.hero-copy h1 span { color: #9b4b31; }
+.hero-copy h1 span { color: #5b6c43; }
 .hero-copy > p { max-width: 44ch; margin-top: 28px; color: var(--muted); font-size: 1.06rem; line-height: 1.85; }
 .hero-actions { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin-top: 32px; }
 .text-link { display: inline-flex; align-items: center; gap: 10px; font: 400 .84rem/1.6 var(--heading); text-decoration: underline; }
 .text-link:hover { color: #9b4b31; }
-.hero-note { display: flex; align-items: center; gap: 10px; color: var(--muted); font: 400 .72rem/1.7 var(--heading); margin-top: 64px; }
+.hero-note { display: flex; align-items: center; gap: 10px; color: var(--muted); font: 400 .72rem/1.7 var(--heading); margin-top: 56px; }
 .hero-image img { display: block; width: 100%; height: clamp(360px, 38vw, 540px); object-fit: cover; border-radius: 12px; }
 .hero-image figcaption { font-size: .76rem; color: var(--muted); margin-top: 12px; }
 .welcome-strip { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(32px, 5vw, 80px); border-top: 1px solid var(--line); margin-top: 64px; padding-top: 40px; }
@@ -54,7 +54,7 @@ main:focus { outline: none; }
 .empty-state p { max-width: 54ch; margin: 16px auto 24px; color: var(--muted); }
 .session-note { max-width: 70ch; font-size: .8rem; color: var(--muted); margin-top: 24px; }
 .mud-button { letter-spacing: normal; }
-.mud-button-filled-primary { color: var(--ink) !important; }
+.mud-button-filled-primary { color: var(--action-foreground) !important; }
 .skip-link { position: absolute; left: 16px; top: -100px; background: var(--ink); color: var(--paper); z-index: 1500; padding: 12px 20px; }
 .skip-link:focus { top: 12px; }
 #blazor-error-ui { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--ink); color: var(--paper); padding: 16px 24px; z-index: 2000; font: 400 .9rem/1.6 var(--heading); }
@@ -87,7 +87,152 @@ main:focus { outline: none; }
     .empty-state { padding: 32px 20px; }
     .site-footer { align-items: flex-start; flex-direction: column; gap: 12px; }
 }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+/* Amara motion: purposeful Operate feedback + one authored confirmation arrival.
+   Thesis — Focal: booking confirmation receipt arrival (650ms, exponential ease-out, from visible default).
+   Continuity: filter/sort/search grid enter, card -> dialog, form -> receipt, nav between screens (entrance only; exit is instant/faster).
+   Feedback: press 100-150ms, field/alert/status 150-300ms, layout/overlay 300-500ms. Ease: cubic-bezier(0.16,1,0.3,1), no bounce/elastic.
+   Material: transform + opacity base, plus bounded blur for focal/dialog focus only. Stagger capped (40ms steps, 200ms max) for real lists only.
+   CSS keyframes/transitions only. No width/height/top/left/margin animation. No new dependency. InteractiveServer-safe (no JS).
+   Content is visible by default; animations use backwards fill so failed CSS keeps content readable. */
+:root { --amara-ease: cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* Base control feedback: acknowledge presses without layout movement. */
+.mud-button-root, .site-navigation > a, .text-link, .menu-toggle {
+    transition: transform 120ms ease-out, background-color 150ms ease-out, border-color 180ms ease-out, color 180ms ease-out, opacity 200ms ease-out;
+}
+.mud-button-root:active:not(:disabled) { transform: scale(0.98); }
+.menu-toggle:active:not(:disabled) { transform: scale(0.97); }
+.site-navigation > a:active { transform: translateY(1px); }
+.text-link:active { transform: translateY(1px); }
+.mud-button-root:disabled { transition: opacity 200ms ease-out, background-color 200ms ease-out; }
+
+/* Native field feedback: border/color only, no layout shift. */
+.filter-field input, .filter-field select, .filter-field textarea, .sort-field select {
+    transition: border-color 180ms ease-out, background-color 180ms ease-out, box-shadow 180ms ease-out, opacity 200ms ease-out;
+}
+.filter-field input:focus-visible, .filter-field select:focus-visible, .filter-field textarea:focus-visible, .sort-field select:focus-visible {
+    box-shadow: 0 0 0 3px rgba(107, 67, 43, 0.18);
+}
+.filter-field input.invalid { transition: border-color 180ms ease-out, box-shadow 180ms ease-out; }
+.validation-message { animation: amara-field-note 200ms var(--amara-ease) backwards; }
+@keyframes amara-field-note { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* Nav continuity between the 5 screens: quiet 300ms arrival, never blocking. Exit is instant (faster than entrance). */
+.home-hero, .rooms-page, .page-container {
+    animation: amara-page-in 300ms var(--amara-ease) backwards;
+}
+@keyframes amara-page-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Filter/sort/search -> grid continuity: enter animation for real list items only. Sort reorder preserves DOM nodes (fast Operate); count regions update via polite live regions. */
+.room-grid > *, .experience-grid > *, .home-featured-pair > * {
+    animation: amara-card-in 350ms var(--amara-ease) backwards;
+}
+.managed-bookings > * { animation: amara-row-in 320ms var(--amara-ease) backwards; }
+.room-grid > *, .experience-grid > *, .managed-bookings > *, .home-featured-room {
+    transition: opacity 200ms ease-out, transform 200ms ease-out, border-color 200ms ease-out;
+}
+/* Capped stagger: 40ms steps, 200ms total max. Beyond 6 items, no added delay. */
+.room-grid > *:nth-child(2), .experience-grid > *:nth-child(2), .managed-bookings > *:nth-child(2), .home-featured-pair > *:nth-child(2) { animation-delay: 40ms; }
+.room-grid > *:nth-child(3), .experience-grid > *:nth-child(3), .managed-bookings > *:nth-child(3) { animation-delay: 80ms; }
+.room-grid > *:nth-child(4), .experience-grid > *:nth-child(4), .managed-bookings > *:nth-child(4) { animation-delay: 120ms; }
+.room-grid > *:nth-child(5), .experience-grid > *:nth-child(5), .managed-bookings > *:nth-child(5) { animation-delay: 160ms; }
+.room-grid > *:nth-child(n+6), .experience-grid > *:nth-child(n+6), .managed-bookings > *:nth-child(n+6) { animation-delay: 200ms; }
+@keyframes amara-card-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes amara-row-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+/* Result counts and availability text: color/opacity only, keeps sort legible without FLIP JS. */
+.booking-result-count, .experience-results, .room-results-bar, .availability, .reservation-status {
+    transition: opacity 200ms ease-out, color 200ms ease-out;
+}
+
+/* Card -> dialog continuity: MudBlazor overlay fades, dialog surface + inner content arrive 300-350ms. Close is MudBlazor's own faster dismiss. */
+.mud-overlay.mud-overlay-dialog { transition: opacity 250ms ease-out; }
+.mud-dialog { animation: amara-dialog-in 350ms var(--amara-ease) backwards; }
+.mud-dialog .dialog-room-photo, .mud-dialog .experience-detail, .mud-dialog .reservation-receipt, .mud-dialog .cancel-intro, .mud-dialog .stay-facts {
+    animation: amara-dialog-content 350ms var(--amara-ease) backwards;
+}
+.mud-dialog .dialog-room-photo { animation-delay: 40ms; }
+@keyframes amara-dialog-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+}
+@keyframes amara-dialog-content {
+    from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* Focal moment: booking confirmation receipt arrival. 650ms exponential ease-out from visible default. Blur bounded 6px, isolated to receipt. */
+.page-container .reservation-receipt { animation: amara-receipt-in 650ms var(--amara-ease) backwards; }
+.page-container .reservation-receipt .receipt-icon { animation: amara-receipt-icon 500ms var(--amara-ease) backwards; animation-delay: 120ms; }
+.page-container .reservation-receipt .receipt-reference { animation: amara-receipt-line 400ms var(--amara-ease) backwards; animation-delay: 180ms; }
+@keyframes amara-receipt-in {
+    from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes amara-receipt-icon {
+    from { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: scale(1); }
+}
+@keyframes amara-receipt-line {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+/* Dialog-hosted receipt stays quiet support: shorter, no blur, so only the confirmation page carries authorship. */
+.reservation-details-dialog .reservation-receipt { animation: amara-dialog-content 300ms var(--amara-ease) backwards; }
+.reservation-details-dialog .reservation-receipt .receipt-icon, .reservation-details-dialog .reservation-receipt .receipt-reference { animation: none; }
+
+/* Form/alert/result feedback 150-300ms: errors, cancellation feedback, empty states. */
+.booking-error { animation: amara-alert-in 250ms var(--amara-ease) backwards; }
+.booking-feedback { animation: amara-alert-in 250ms var(--amara-ease) backwards; }
+.empty-state { animation: amara-alert-in 300ms var(--amara-ease) backwards; }
+@keyframes amara-alert-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Mobile navigation overlay: layout change 300ms, document-flow panel only. */
+.site-navigation.is-open { animation: amara-nav-in 300ms var(--amara-ease) backwards; }
+@keyframes amara-nav-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* Skeleton loading: aspect-ratio boxes prevent layout shift while images paint. Real content stays visible by default; backgrounds only fill the reserved box. */
+.room-photo, .home-featured-room > img, .booking-summary > img, .dialog-room-photo, .hero-image img, .selected-stay > img {
+    background-color: var(--line);
+}
+/* Opt-in skeleton blocks matching Rooms grid cards, Experiences grid cards, Bookings rows, and dialog content. Shimmer moves via transform only. */
+.amara-skeleton { position: relative; overflow: hidden; background: var(--line); border-radius: 12px; }
+.amara-skeleton::after {
+    content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent 20%, #faf9f5 50%, transparent 80%);
+    animation: amara-shimmer 1.6s ease-in-out infinite; will-change: transform;
+}
+.amara-skeleton-img { aspect-ratio: 3 / 2; min-height: 120px; }
+.amara-skeleton-dialog-img { height: 240px; }
+.amara-skeleton-card { min-height: 280px; }
+.amara-skeleton-row { min-height: 120px; }
+.amara-skeleton-text { border-radius: 8px; min-height: 16px; }
+@keyframes amara-shimmer { to { transform: translateX(100%); } }
+
+/* Reduced motion: remove spatial movement and blur, keep opacity/color/state meaning. Focus order and keyboard paths unchanged. */
+@media (prefers-reduced-motion: reduce) {
+    .home-hero, .rooms-page, .page-container,
+    .room-grid > *, .experience-grid > *, .managed-bookings > *, .home-featured-pair > *,
+    .mud-dialog, .mud-dialog .dialog-room-photo, .mud-dialog .experience-detail,
+    .mud-dialog .reservation-receipt, .mud-dialog .cancel-intro, .mud-dialog .stay-facts,
+    .page-container .reservation-receipt, .page-container .reservation-receipt .receipt-icon,
+    .page-container .reservation-receipt .receipt-reference, .reservation-details-dialog .reservation-receipt,
+    .booking-error, .booking-feedback, .empty-state, .site-navigation.is-open, .validation-message {
+        animation: amara-reduced-fade 150ms ease-out backwards !important;
+        filter: none !important;
+    }
+    .mud-button-root, .site-navigation > a, .text-link, .menu-toggle,
+    .filter-field input, .filter-field select, .filter-field textarea, .sort-field select,
+    .booking-result-count, .experience-results, .room-results-bar, .availability, .reservation-status {
+        transition: opacity 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out, background-color 150ms ease-out !important;
+        transform: none !important;
+    }
+    .mud-button-root:active:not(:disabled), .menu-toggle:active:not(:disabled),
+    .site-navigation > a:active, .text-link:active { transform: none !important; }
+    .amara-skeleton::after { animation: none !important; opacity: 0.5; transform: none; }
+}
+@keyframes amara-reduced-fade { from { opacity: 0; } to { opacity: 1; } }
 h1:focus { outline: none; }
 
 /* Room browsing: shared Amara typography and palette, with flat inventory cards. */
@@ -108,23 +253,24 @@ h1:focus { outline: none; }
 .room-results-bar strong { font: 600 1.1rem/1.5 var(--heading); }
 .room-results-bar p { font-size: .82rem; color: var(--muted); margin-top: 4px; }
 .sort-field { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.filter-field select, .sort-field select { padding: 10px 40px 10px 12px; }
 .sort-field select { width: auto; }
 .inventory-note { font-size: .76rem; color: var(--muted); margin-block: 16px 24px; }
 .room-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
 .room-card { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
 .room-photo { display: block; width: 100%; aspect-ratio: 3/2; height: auto; object-fit: cover; }
 .room-card-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
-.room-card-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font: 400 .72rem/1.6 var(--heading); color: var(--muted); margin-bottom: 12px; }
-.availability { font-weight: 600; }
+.room-card-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font: 500 .75rem/1.6 var(--heading); letter-spacing: .02em; color: var(--muted); margin-bottom: 10px; }
+.availability { font: 600 .7rem/1.6 var(--heading); letter-spacing: .06em; text-transform: uppercase; }
 .availability.available { color: #5b6c43; }
 .availability.unavailable { color: #9b3027; }
-.room-card h2 { font-size: 1.45rem; line-height: 1.4; font-weight: 400; }
-.room-card-body > p { color: var(--muted); font-size: .9rem; margin-top: 12px; }
-.room-amenities { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 0; margin-block: 20px 24px; list-style: none; font: 400 .73rem/1.6 var(--heading); }
+.room-card h2 { font-size: 1.5rem; line-height: 1.35; font-weight: 500; letter-spacing: -.02em; }
+.room-card-body > p { color: var(--muted); font-size: .95rem; line-height: 1.7; margin-top: 10px; }
+.room-amenities { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 0; margin-block: 16px 20px; list-style: none; font: 500 .78rem/1.5 var(--heading); color: var(--ink); }
 .room-card-bottom { margin-top: auto; border-top: 1px solid var(--line); padding-top: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 .room-price { display: flex; flex-direction: column; }
-.room-price strong { font: 600 1.05rem/1.5 var(--heading); font-variant-numeric: tabular-nums; }
-.room-price span { font-size: .73rem; color: var(--muted); }
+.room-price strong { font: 600 1.15rem/1.4 var(--heading); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.room-price span { font-size: .74rem; font-weight: 500; color: var(--muted); margin-top: 2px; }
 .room-card-actions { display: flex; align-items: center; gap: 8px; }
 .dialog-room-photo { width: 100%; height: 240px; object-fit: cover; border-radius: 12px; }
 .room-detail-description { margin-top: 20px; font-family: var(--body); color: var(--muted); }
@@ -251,14 +397,15 @@ h1:focus { outline: none; }
 .home-search form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; align-items: end; gap: 16px; margin-top: 24px; }
 .home-search form > .mud-button-root { min-height: 46px; }
 .home-featured { margin-top: 64px; }
-.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
-.home-featured-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-.home-featured-card { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-.home-featured-card img { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; }
-.home-featured-card > div { padding: 24px; }
-.home-featured-card h3 { font: 400 1.4rem/1.4 var(--heading); }
-.home-featured-card p { margin: 12px 0; color: var(--muted); }
-.home-featured-card span { font: 600 .8rem/1.5 var(--heading); }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.home-featured-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: stretch; }
+.home-featured-room { display: grid; grid-template-rows: auto 1fr; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.home-featured-room > img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.home-featured-room-body { display: flex; flex-direction: column; padding: 24px; color: var(--ink); }
+.home-featured-room h3 { margin: 0; font: 500 1.55rem/1.35 var(--heading); letter-spacing: -.02em; }
+.home-featured-room-body > p { margin: 10px 0 0; font-size: .95rem; line-height: 1.7; color: var(--muted); }
+.home-featured-room-body .home-featured-room-meta { margin: auto 0 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font: 500 .78rem/1.5 var(--heading); font-variant-numeric: tabular-nums; }
+.home-featured-room-meta .price { color: #9b4b31; font-size: .84rem; font-weight: 600; }
 .home-experiences { margin-top: 64px; padding: 48px 0; border-block: 1px solid var(--line); }
 .home-experiences > div { max-width: 65ch; }
 .home-experiences p { margin: 16px 0; }
@@ -272,17 +419,75 @@ h1:focus { outline: none; }
 .experience-card h2 { margin-top: 20px; font: 400 1.45rem/1.4 var(--heading); }
 .experience-card p { margin: 12px 0 20px; color: var(--muted); }
 .experience-card > .mud-button-root { align-self: flex-start; margin-top: auto; }
+.experience-detail { padding: 4px 0 8px; }
+.experience-detail-intro { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 18px; align-items: start; padding-bottom: 24px; }
+.experience-detail-icon { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 12px; background: #edf0e8; color: #5b6c43; }
 .experience-dialog-meta { color: #5b6c43; font: 600 .78rem/1.5 var(--heading); }
-.experience-itinerary { padding-left: 24px; margin: 12px 0 24px; }
-.experience-itinerary li { margin-block: 10px; padding-left: 4px; }
+.experience-detail-description { margin-top: 8px; max-width: 52ch; color: var(--ink); }
+.experience-detail-section { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 20px; }
+.experience-detail-section h3 { font: 400 1.05rem/1.5 var(--heading); }
+.experience-itinerary { margin: 12px 0 0; padding-left: 24px; }
+.experience-itinerary li { padding-left: 8px; margin-top: 10px; }
+.experience-itinerary li::marker { color: #5b6c43; font-family: var(--heading); font-weight: 600; }
+.experience-inclusions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; margin: 12px 0 0; padding-left: 20px; }
+.experience-inclusions li::marker { color: #5b6c43; }
+.experience-preparation { margin-top: 12px; max-width: 60ch; }
+@media (max-width: 480px) {
+    .experience-detail-intro { grid-template-columns: 1fr; gap: 12px; }
+    .experience-detail-icon { width: 52px; height: 52px; }
+    .experience-inclusions { grid-template-columns: 1fr; }
+}
 @media (max-width: 960px) { .home-search form { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 760px) {
     .home-search, .home-featured, .home-experiences { margin-top: 40px; }
     .home-search { padding: 24px; }
-    .home-search form, .home-featured-grid, .experience-grid { grid-template-columns: 1fr; }
+    .home-search form, .experience-grid { grid-template-columns: 1fr; }
     .section-heading { align-items: flex-start; flex-direction: column; }
+    .home-featured-pair { grid-template-columns: 1fr; gap: 24px; }
     .home-experiences { padding-block: 32px; }
     .experience-filters { grid-template-columns: 1fr 1fr; }
     .experience-filters > .mud-button-root { grid-column: 1 / -1; justify-self: start; }
 }
 @media (max-width: 390px) { .experience-filters { grid-template-columns: 1fr; } .experience-filters > .mud-button-root { grid-column: auto; } }
+
+/* Home ambience — Living resort (Persuade focal for Home only).
+   Delight thesis: the resort breathes slowly around you, so slowness feels real.
+   Focal: 650-750ms hero arrival from visible default (rise + clip unveil, bounded 4px blur).
+   Continuity: search focus-within border, featured hover lift (transform only).
+   Ambience: 26s hero drift + 28s sun turn, transform only, infinite but cheap.
+   Budget: no layout-property animation, no new dependency, Blazor Server-safe CSS only. */
+.home-hero { animation: none; }
+.home-hero .hero-copy > * { animation: amara-home-rise 650ms var(--amara-ease) backwards; }
+.home-hero .hero-copy h1 { animation-delay: 20ms; }
+.home-hero .hero-copy > p { animation-delay: 110ms; }
+.home-hero .hero-actions { animation-delay: 190ms; }
+.home-hero .hero-note { animation-delay: 270ms; }
+@keyframes amara-home-rise {
+    from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+.home-hero .hero-image { animation: amara-home-photo 750ms var(--amara-ease) backwards; animation-delay: 140ms; }
+@keyframes amara-home-photo {
+    from { opacity: 0; transform: translateY(16px); clip-path: inset(4% 4% 4% 4% round 12px); }
+    to { opacity: 1; transform: none; clip-path: inset(0 0 0 0 round 12px); }
+}
+.hero-image { overflow: clip; border-radius: 12px; }
+.hero-image img { border-radius: 12px; animation: amara-hero-drift 26s ease-in-out infinite alternate; }
+@keyframes amara-hero-drift { from { transform: scale(1); } to { transform: scale(1.06); } }
+.hero-note .mud-icon-root { display: inline-flex; animation: amara-sun-turn 28s linear infinite; }
+@keyframes amara-sun-turn { to { transform: rotate(360deg); } }
+.home-search { transition: border-color 200ms ease-out; }
+.home-search:focus-within { border-color: #788c5d; }
+.home-search-live { margin: 16px 0 0; font: 400 .8rem/1.6 var(--heading); color: #5b6c43; }
+.home-featured-room { transition: opacity 200ms ease-out, transform 200ms ease-out, border-color 200ms ease-out; }
+.home-featured-room:hover { transform: translateY(-4px); border-color: #b0aea5; }
+.home-featured-room > img { transition: transform 500ms var(--amara-ease); }
+.home-featured-room:hover > img { transform: scale(1.03); }
+@media (prefers-reduced-motion: reduce) {
+    .home-hero .hero-copy > *, .home-hero .hero-image, .hero-image img, .hero-note .mud-icon-root {
+        animation: amara-reduced-fade 150ms ease-out backwards !important;
+    }
+    .hero-image img, .home-featured-room:hover, .home-featured-room:hover > img { transform: none !important; }
+}
+
