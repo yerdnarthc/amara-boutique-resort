@@ -1,4 +1,4 @@
-﻿# Amara — Stays & Experiences
+# Amara — Stays & Experiences
 
 ## Purpose and project context
 
@@ -25,9 +25,9 @@ Keep architecture lightweight. Use mock/in-memory data. Add persistence, authent
 
 - Verified SDK: .NET 8.0.400.
 - No Blazor application or .csproj existed when this plan was created.
-- MudBlazor and Radzen are not installed in an application project yet.
-- Planning is complete; implementation has not started.
-- The next task is Increment 1 below.
+- MudBlazor 8.15.0 is installed and configured; Radzen is not used.
+- Increment 1 is implemented: .NET 8 Blazor foundation, responsive shell, and five working routes.
+- The next implementation task is Increment 2: room browsing.
 - The lab computer has administrator restrictions; prefer user-accessible tooling and existing installations.
 
 ## Skill references
@@ -162,7 +162,7 @@ Useful components include RoomCard, ExperienceCard, EmptyState, and reservation/
 | 4. Booking management | Shared reservation list, search, details, cancellation | New reservations appear; cancelled bookings release availability |
 | 5. Tourism and polish | Experience catalog, itineraries, completed Home, responsive/empty states | Complete guest journey and experience browsing work across all five screens |
 
-- [ ] Increment 1 complete
+- [x] Increment 1 complete
 - [ ] Increment 2 complete
 - [ ] Increment 3 complete
 - [ ] Increment 4 complete
@@ -190,10 +190,10 @@ Verify:
 ## Decision and progress log
 
 - Initial plan: five-screen resort booking and local experience website, using .NET 8, MudBlazor, mock data, and Anthropic-inspired palette/typography.
-- Current next action: implement Increment 1, the foundation and branded layout.
+- Increment 1 complete on feature/amara-foundation. Build: zero warnings/errors. Edge checks: five routes, 404 fallback, local assets, responsive overflow, mobile menu. Next: Increment 2, room browsing.
 
 ## Impeccable design guidance
 
 The full official Impeccable skill is installed at [.agents/skills/impeccable/SKILL.md](.agents/skills/impeccable/SKILL.md). Use it for design, UI/UX, accessibility, responsive behavior, and clear interface copy throughout the increments above. Its quality guidance complements the existing hospitality skills and the selected Anthropic brand identity; preserve this plan's C#/Blazor stack and exam scope.
 
-See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, all included commands, Windows launcher usage, Codex hook activation, verification, and limitations. Before the first UI implementation, initialize its product context from this plan and follow its new-work guidance. Installation alone has not created PRODUCT.md or DESIGN.md.
+See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, all included commands, Windows launcher usage, Codex hook activation, verification, and limitations. Before the first UI implementation, initialize its product context from this plan and follow its new-work guidance. PRODUCT.md now records the approved product context; DESIGN.md records the implemented foundation design system.

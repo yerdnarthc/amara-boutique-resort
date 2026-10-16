@@ -1,0 +1,295 @@
+﻿{
+    "schemaVersion":  2,
+    "generatedAt":  "2026-10-16T08:38:47.1964206Z",
+    "title":  "Design System: Amara",
+    "extensions":  {
+                       "colorMeta":  {
+                                         "terracotta":  {
+                                                            "displayName":  "Terracotta",
+                                                            "tonalRamp":  [
+                                                                              "oklch(15% 0.14 42)",
+                                                                              "oklch(26% 0.14 42)",
+                                                                              "oklch(38% 0.14 42)",
+                                                                              "oklch(49% 0.14 42)",
+                                                                              "oklch(61% 0.14 42)",
+                                                                              "oklch(72% 0.14 42)",
+                                                                              "oklch(84% 0.14 42)",
+                                                                              "oklch(95% 0.14 42)"
+                                                                          ],
+                                                            "role":  "primary"
+                                                        },
+                                         "terracotta-hover":  {
+                                                                  "displayName":  "Terracotta Hover",
+                                                                  "tonalRamp":  [
+                                                                                    "oklch(15% 0.14 42)",
+                                                                                    "oklch(26% 0.14 42)",
+                                                                                    "oklch(38% 0.14 42)",
+                                                                                    "oklch(49% 0.14 42)",
+                                                                                    "oklch(61% 0.14 42)",
+                                                                                    "oklch(72% 0.14 42)",
+                                                                                    "oklch(84% 0.14 42)",
+                                                                                    "oklch(95% 0.14 42)"
+                                                                                ],
+                                                                  "role":  "primary"
+                                                              },
+                                         "terracotta-ink":  {
+                                                                "displayName":  "Terracotta Ink",
+                                                                "tonalRamp":  [
+                                                                                  "oklch(15% 0.12 42)",
+                                                                                  "oklch(26% 0.12 42)",
+                                                                                  "oklch(38% 0.12 42)",
+                                                                                  "oklch(49% 0.12 42)",
+                                                                                  "oklch(61% 0.12 42)",
+                                                                                  "oklch(72% 0.12 42)",
+                                                                                  "oklch(84% 0.12 42)",
+                                                                                  "oklch(95% 0.12 42)"
+                                                                              ],
+                                                                "role":  "primary"
+                                                            },
+                                         "sage":  {
+                                                      "displayName":  "Sage",
+                                                      "tonalRamp":  [
+                                                                        "oklch(15% 0.07 125)",
+                                                                        "oklch(26% 0.07 125)",
+                                                                        "oklch(38% 0.07 125)",
+                                                                        "oklch(49% 0.07 125)",
+                                                                        "oklch(61% 0.07 125)",
+                                                                        "oklch(72% 0.07 125)",
+                                                                        "oklch(84% 0.07 125)",
+                                                                        "oklch(95% 0.07 125)"
+                                                                    ],
+                                                      "role":  "secondary"
+                                                  },
+                                         "sage-ink":  {
+                                                          "displayName":  "Sage Ink",
+                                                          "tonalRamp":  [
+                                                                            "oklch(15% 0.07 125)",
+                                                                            "oklch(26% 0.07 125)",
+                                                                            "oklch(38% 0.07 125)",
+                                                                            "oklch(49% 0.07 125)",
+                                                                            "oklch(61% 0.07 125)",
+                                                                            "oklch(72% 0.07 125)",
+                                                                            "oklch(84% 0.07 125)",
+                                                                            "oklch(95% 0.07 125)"
+                                                                        ],
+                                                          "role":  "secondary"
+                                                      },
+                                         "paper":  {
+                                                       "displayName":  "Paper",
+                                                       "tonalRamp":  [
+                                                                         "oklch(15% 0.01 95)",
+                                                                         "oklch(26% 0.01 95)",
+                                                                         "oklch(38% 0.01 95)",
+                                                                         "oklch(49% 0.01 95)",
+                                                                         "oklch(61% 0.01 95)",
+                                                                         "oklch(72% 0.01 95)",
+                                                                         "oklch(84% 0.01 95)",
+                                                                         "oklch(95% 0.01 95)"
+                                                                     ],
+                                                       "role":  "neutral"
+                                                   },
+                                         "charcoal":  {
+                                                          "displayName":  "Charcoal",
+                                                          "tonalRamp":  [
+                                                                            "oklch(15% 0.005 95)",
+                                                                            "oklch(26% 0.005 95)",
+                                                                            "oklch(38% 0.005 95)",
+                                                                            "oklch(49% 0.005 95)",
+                                                                            "oklch(61% 0.005 95)",
+                                                                            "oklch(72% 0.005 95)",
+                                                                            "oklch(84% 0.005 95)",
+                                                                            "oklch(95% 0.005 95)"
+                                                                        ],
+                                                          "role":  "neutral"
+                                                      },
+                                         "muted-ink":  {
+                                                           "displayName":  "Muted Ink",
+                                                           "tonalRamp":  [
+                                                                             "oklch(15% 0.01 95)",
+                                                                             "oklch(26% 0.01 95)",
+                                                                             "oklch(38% 0.01 95)",
+                                                                             "oklch(49% 0.01 95)",
+                                                                             "oklch(61% 0.01 95)",
+                                                                             "oklch(72% 0.01 95)",
+                                                                             "oklch(84% 0.01 95)",
+                                                                             "oklch(95% 0.01 95)"
+                                                                         ],
+                                                           "role":  "neutral"
+                                                       },
+                                         "hairline":  {
+                                                          "displayName":  "Hairline",
+                                                          "tonalRamp":  [
+                                                                            "oklch(15% 0.015 95)",
+                                                                            "oklch(26% 0.015 95)",
+                                                                            "oklch(38% 0.015 95)",
+                                                                            "oklch(49% 0.015 95)",
+                                                                            "oklch(61% 0.015 95)",
+                                                                            "oklch(72% 0.015 95)",
+                                                                            "oklch(84% 0.015 95)",
+                                                                            "oklch(95% 0.015 95)"
+                                                                        ],
+                                                          "role":  "neutral"
+                                                      },
+                                         "focus-brown":  {
+                                                             "displayName":  "Focus Brown",
+                                                             "tonalRamp":  [
+                                                                               "oklch(15% 0.07 55)",
+                                                                               "oklch(26% 0.07 55)",
+                                                                               "oklch(38% 0.07 55)",
+                                                                               "oklch(49% 0.07 55)",
+                                                                               "oklch(61% 0.07 55)",
+                                                                               "oklch(72% 0.07 55)",
+                                                                               "oklch(84% 0.07 55)",
+                                                                               "oklch(95% 0.07 55)"
+                                                                           ],
+                                                             "role":  "neutral"
+                                                         },
+                                         "validation-red":  {
+                                                                "displayName":  "Validation Red",
+                                                                "tonalRamp":  [
+                                                                                  "oklch(15% 0.15 30)",
+                                                                                  "oklch(26% 0.15 30)",
+                                                                                  "oklch(38% 0.15 30)",
+                                                                                  "oklch(49% 0.15 30)",
+                                                                                  "oklch(61% 0.15 30)",
+                                                                                  "oklch(72% 0.15 30)",
+                                                                                  "oklch(84% 0.15 30)",
+                                                                                  "oklch(95% 0.15 30)"
+                                                                              ],
+                                                                "role":  "primary"
+                                                            }
+                                     },
+                       "typographyMeta":  {
+                                              "body":  {
+                                                           "displayName":  "Reading copy",
+                                                           "purpose":  "Descriptions and paragraphs."
+                                                       },
+                                              "label":  {
+                                                            "displayName":  "Supporting action",
+                                                            "purpose":  "Text links."
+                                                        },
+                                              "display":  {
+                                                              "displayName":  "Hero display",
+                                                              "purpose":  "Home hero headline."
+                                                          },
+                                              "button":  {
+                                                             "displayName":  "Button",
+                                                             "purpose":  "MudBlazor filled actions."
+                                                         },
+                                              "navigation":  {
+                                                                 "displayName":  "Navigation",
+                                                                 "purpose":  "Desktop route links."
+                                                             },
+                                              "headline":  {
+                                                               "displayName":  "Page headline",
+                                                               "purpose":  "Page introductions."
+                                                           },
+                                              "title":  {
+                                                            "displayName":  "Section title",
+                                                            "purpose":  "Welcome section heading."
+                                                        }
+                                          },
+                       "shadows":  [
+
+                                   ],
+                       "motion":  [
+                                      {
+                                          "name":  "reduced-motion",
+                                          "value":  "animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important",
+                                          "purpose":  "Applied when prefers-reduced-motion is reduce. No custom decorative animation is implemented."
+                                      }
+                                  ],
+                       "breakpoints":  [
+                                           {
+                                               "value":  "960px",
+                                               "name":  "compact-desktop"
+                                           },
+                                           {
+                                               "value":  "760px",
+                                               "name":  "mobile-navigation"
+                                           }
+                                       ]
+                   },
+    "components":  [
+                       {
+                           "name":  "Booking action",
+                           "description":  "Prominent final navigation action.",
+                           "css":  ".ds-book{display:inline-flex;align-items:center;gap:14px;padding:13px 20px;background:var(--accent);color:var(--ink);border-radius:8px;text-decoration:none;font:400 .82rem var(--heading)}.ds-book:hover{background:#cc6b4c}.ds-book:focus-visible{outline:3px solid #6b432b;outline-offset:5px}",
+                           "kind":  "button",
+                           "refersTo":  "booking-action",
+                           "html":  "\u003ca class=\"ds-book\" href=\"#book\"\u003eBook a stay \u003csvg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"\u003e\u003cpath fill=\"currentColor\" d=\"M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5z\"/\u003e\u003c/svg\u003e\u003c/a\u003e"
+                       },
+                       {
+                           "name":  "Text link",
+                           "description":  "Supporting action with an underline.",
+                           "css":  ".ds-link{display:inline-flex;align-items:center;gap:10px;color:var(--ink);font:400 .84rem/1.6 var(--heading);text-decoration:underline;text-underline-offset:.25em}.ds-link:hover{color:#9b4b31}.ds-link:focus-visible{outline:3px solid #6b432b;outline-offset:5px}",
+                           "kind":  "button",
+                           "refersTo":  "text-link",
+                           "html":  "\u003ca class=\"ds-link\" href=\"#experiences\"\u003eDiscover experiences\u003c/a\u003e"
+                       },
+                       {
+                           "name":  "Menu toggle",
+                           "description":  "Mobile navigation toggle; interactive state belongs to Blazor.",
+                           "css":  ".ds-menu{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--paper);color:var(--ink);font-family:var(--heading);cursor:pointer}.ds-menu:focus-visible{outline:3px solid #6b432b;outline-offset:5px}",
+                           "kind":  "button",
+                           "refersTo":  "menu-toggle",
+                           "html":  "\u003cbutton class=\"ds-menu\" type=\"button\" aria-expanded=\"false\"\u003e\u003csvg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"\u003e\u003cpath fill=\"currentColor\" d=\"M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z\"/\u003e\u003c/svg\u003eMenu\u003c/button\u003e"
+                       },
+                       {
+                           "html":  "\u003cnav class=\"ds-nav\" aria-label=\"Preview navigation\"\u003e\u003ca class=\"ds-active\" href=\"#home\" aria-current=\"page\"\u003eHome\u003c/a\u003e\u003ca href=\"#rooms\"\u003eRooms\u003c/a\u003e\u003ca href=\"#experiences\"\u003eExperiences\u003c/a\u003e\u003c/nav\u003e",
+                           "description":  "Quiet links marked by an accent underline.",
+                           "name":  "Navigation links",
+                           "css":  ".ds-nav{display:flex;flex-wrap:wrap;align-items:center;gap:30px;font:400 .82rem var(--heading);color:var(--ink)}.ds-nav a{color:inherit;text-decoration:none;padding-block:12px;border-bottom:2px solid transparent}.ds-nav a:hover,.ds-nav .ds-active{border-bottom-color:var(--accent)}.ds-nav a:focus-visible{outline:3px solid #6b432b;outline-offset:5px}",
+                           "kind":  "nav"
+                       },
+                       {
+                           "name":  "Empty state container",
+                           "description":  "Centered, bordered content for unfinished collections and empty lists.",
+                           "css":  ".ds-empty{padding:48px 32px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);text-align:center}.ds-empty h2{margin:0;font:400 1.4rem/1.5 var(--heading)}.ds-empty p{max-width:54ch;margin:16px auto 24px;color:var(--muted);font:400 1rem/1.7 var(--body)}@media(max-width:760px){.ds-empty{padding:32px 20px}}",
+                           "kind":  "card",
+                           "refersTo":  "empty-state",
+                           "html":  "\u003csection class=\"ds-empty\"\u003e\u003ch2\u003eThe room collection is on its way\u003c/h2\u003e\u003cp\u003eThere are no rooms listed yet. Explore the rest of Amara while the collection is prepared.\u003c/p\u003e\u003c/section\u003e"
+                       }
+                   ],
+    "narrative":  {
+                      "northStar":  "Room to unwind",
+                      "overview":  "Amara combines warm paper, charcoal type, restrained terracotta actions, and destination photography. The visual direction follows the approved Anthropic palette and Poppins/Lora pairing; it expresses a fictional hospitality brand through generous space and calm editorial composition.\n\nPoppins gives headings and navigation a clear, contemporary voice. Lora makes descriptive copy feel unhurried. Thin rules and shared background tones organize the interface without decorative depth. This document records the implemented foundation, rather than future inventory or booking interfaces.",
+                      "keyCharacteristics":  [
+                                                 "Warm paper surfaces with charcoal text.",
+                                                 "Regular-weight Poppins headings and Lora reading copy.",
+                                                 "Terracotta actions with dark, readable labels.",
+                                                 "Thin separators, gently rounded containers, and local photography.",
+                                                 "Responsive navigation and visible keyboard focus."
+                                             ],
+                      "rules":  [
+                                    {
+                                        "section":  "colors",
+                                        "body":  "Terracotta filled actions use charcoal labels, matching the configured primary contrast color.",
+                                        "name":  "The Dark Label Rule"
+                                    },
+                                    {
+                                        "section":  "typography",
+                                        "body":  "Use Poppins for headings and controls, and Lora for descriptive body copy.",
+                                        "name":  "The Two Voice Rule"
+                                    },
+                                    {
+                                        "section":  "elevation",
+                                        "body":  "Separate foundation sections with spacing and hairlines before introducing elevation.",
+                                        "name":  "The Quiet Surface Rule"
+                                    }
+                                ],
+                      "dos":  [
+                                  "Do keep warm paper and charcoal as the dominant surface and text pairing.",
+                                  "Do use Poppins for headings and controls, and Lora for descriptive copy.",
+                                  "Do retain dark labels on terracotta filled actions.",
+                                  "Do preserve the shared container, mobile stacking, and visible keyboard outlines.",
+                                  "Do use real SVG icons and credited local illustrative photography."
+                              ],
+                      "donts":  [
+                                    "Don\u0027t replace the approved palette or typography when adding a screen.",
+                                    "Don\u0027t add decorative gradients, heavy shadows, or unnecessary animation to this restrained foundation.",
+                                    "Don\u0027t document unimplemented inputs, cards, or dialogs as established patterns.",
+                                    "Don\u0027t use muted decorative brand colors for low-contrast body text."
+                                ]
+                  }
+}
