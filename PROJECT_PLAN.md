@@ -27,7 +27,7 @@ Keep architecture lightweight. Use mock/in-memory data. Add persistence, authent
 - No Blazor application or .csproj existed when this plan was created.
 - MudBlazor 8.15.0 is installed and configured; Radzen is not used.
 - Increment 1 is implemented: .NET 8 Blazor foundation, responsive shell, and five working routes.
-- Increments 1–3 are implemented: foundation, room browsing, guest form, reservation submission, and confirmation. Next: Increment 4, booking management.
+- Increments 1-4 are implemented: foundation, room browsing, reservations, and booking management. Next: Increment 5, experiences and final polish.
 - The lab computer has administrator restrictions; prefer user-accessible tooling and existing installations.
 
 ## Skill references
@@ -165,7 +165,7 @@ Useful components include RoomCard, ExperienceCard, EmptyState, and reservation/
 - [x] Increment 1 complete
 - [x] Increment 2 complete
 - [x] Increment 3 complete
-- [ ] Increment 4 complete
+- [x] Increment 4 complete
 - [ ] Increment 5 complete
 
 Build after each meaningful increment. Inspect and fix compilation errors before adding optional polish. Update this checklist and record material decisions below as implementation progresses.
@@ -222,3 +222,16 @@ See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, a
 - Verification: final build zero warnings/errors. Fifteen direct state checks passed validation, snapshot pricing, repeated events, overlaps, adjacent dates, atomic concurrent attempts, and session isolation. Edge checks passed required fields/contact/capacity/date validation, live totals, double-click protection, receipt requests, in-session navigation, room availability updates, recoverable availability rechecks, fresh-session behavior, focus, and widths 320–1440.
 - Impeccable finish review: ship within Increment 3 scope. Only known standalone Razor stylesheet-resolution advisories appeared in the detector.
 - Next: Increment 4 reservation search, details/management, confirmation before cancellation, and releasing cancelled room availability.
+
+### Increment 4 completion
+
+- Branch: feature/amara-booking-management.
+- My Bookings now searches guest name, room, email, and reference (case-insensitive, with outer whitespace trimmed). Search combines with All/Confirmed/Cancelled filters; clear/no-match and empty-session states are provided.
+- Responsive rows show room, guest, reference, stay dates, total/original quote, status, and actions. Details reuse the receipt in a scrollable dialog, with an Open receipt action.
+- Cancel stay opens an explicit confirmation dialog identifying the reservation. Keep reservation, close, or Escape dismiss without cancelling; backdrop clicks cannot confirm cancellation.
+- TryCancel updates status atomically and preserves the original quote, guest snapshot, reference, and history. Repeated/unknown cancellation requests are safely rejected. Only confirmed stays block room availability; unrelated sample holds and other confirmed reservations remain effective.
+- Replay of the old submission ID returns the current cancelled receipt and cannot resurrect a stay. A new submission can book the released dates with a new reference.
+- Written feedback reports successful cancellation, active filters/counts update, and cancelled rows disable repeated cancellation. Full receipts show a cancelled heading/icon/status rather than stale confirmation.
+- Verification: build zero warnings/errors; 15 direct state checks and 11 Edge flow checks passed, including combined search/status, details/dismissal, confirmation, retained history, cancelled receipts, restored availability, and rebooking. No browser errors; widths 320/390/760/960/1440 had no horizontal overflow.
+- Dialog captures were repeated after entrance animations settled: identity transforms, 600px desktop and 326px at a 390px viewport, with 14.4px fact text. Impeccable review: ship, no material fixes.
+- Next: Increment 5, local experience catalog and itineraries, completed Home content, and final responsive/empty-state polish. Persistence remains session-only.

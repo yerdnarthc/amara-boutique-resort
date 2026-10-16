@@ -6,7 +6,7 @@
 <div class="page-container">
     @if (_confirmation is not null)
     {
-        <section class="page-intro" aria-labelledby="confirmation-title"><h1 id="confirmation-title" tabindex="-1" @ref="_confirmationTitle">Your stay is confirmed.</h1><p>Keep your reservation reference and review your stay details below.</p></section>
+        <section class="page-intro" aria-labelledby="confirmation-title"><h1 id="confirmation-title" tabindex="-1" @ref="_confirmationTitle">@(_confirmation.Status == ReservationStatus.Cancelled ? "Your stay is cancelled." : "Your stay is confirmed.")</h1><p>Keep your reservation reference and review the current status and stay details below.</p></section>
         <ReservationReceipt Reservation="_confirmation" />
     }
     else if (_room is null || _editContext is null)

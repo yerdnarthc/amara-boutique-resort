@@ -1,5 +1,5 @@
 <section class="reservation-receipt" aria-labelledby="receipt-title">
-    <div class="receipt-heading"><MudIcon Icon="@Icons.Material.Outlined.CheckCircle" Class="receipt-icon" Size="Size.Large" /><div><h2 id="receipt-title">@Reservation.RoomName</h2><p>Demo reservation · @Reservation.Status</p></div></div>
+    <div class="receipt-heading"><MudIcon Icon="@(Reservation.Status == ReservationStatus.Cancelled ? Icons.Material.Outlined.Cancel : Icons.Material.Outlined.CheckCircle)" Class="@(Reservation.Status == ReservationStatus.Cancelled ? "receipt-icon is-cancelled" : "receipt-icon")" Size="Size.Large" /><div><h2 id="receipt-title">@Reservation.RoomName</h2><p>Demo reservation · @Reservation.Status</p></div></div>
     <div class="receipt-reference"><span>Reservation reference</span><strong>@Reservation.Reference</strong></div>
     <dl class="stay-facts receipt-facts">
         <div><dt>Lead guest</dt><dd>@Reservation.GuestName</dd></div>
@@ -13,10 +13,15 @@
     {
         <div class="receipt-requests"><h3>Special requests</h3><p>@Reservation.SpecialRequests</p><p class="session-note">Requests are noted and are not guaranteed.</p></div>
     }
+    @if (Reservation.Status == ReservationStatus.Cancelled) { <p class="cancelled-note">This stay is cancelled. Its dates have been released; current availability depends on other reservations.</p> }
     <div class="stay-total"><span>@Reservation.Nights @(Reservation.Nights == 1 ? "night" : "nights") × @BookingState.Money(Reservation.NightlyRate)</span><strong>@BookingState.Money(Reservation.Total)</strong></div>
     <p class="session-note">No payment was collected and no email has been sent. This fictional reservation is stored in this session only and may disappear on refresh or restart.</p>
+    @if (ShowActions)
+    {
     <div class="receipt-actions"><MudButton Href="bookings" Color="Color.Primary" Variant="Variant.Filled" DropShadow="false">My bookings</MudButton><MudButton Href="rooms" Variant="Variant.Outlined" Color="Color.Default">Explore more rooms</MudButton></div>
+    }
 </section>
 @code {
+    [Parameter] public bool ShowActions { get; set; } = true;
     [Parameter, EditorRequired] public Reservation Reservation { get; set; } = default!;
 }

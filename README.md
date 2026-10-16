@@ -23,7 +23,7 @@ dotnet --version
 
 ## Current stage
 
-Increments 1–3: foundation, room browsing, and reservations. The five routes, responsive navigation, Amara theme, locally hosted fonts/photo, shared page introductions/empty states, and branded error/not-found pages are implemented. Home has an initial branded composition; its final content is scheduled for Increment 5.
+Increments 1-4: foundation, room browsing, reservations, and booking management. The five routes, responsive navigation, Amara theme, locally hosted fonts/photo, shared page introductions/empty states, and branded error/not-found pages are implemented. Home has an initial branded composition; its final content is scheduled for Increment 5.
 
 | Route | Screen |
 | --- | --- |
@@ -33,7 +33,7 @@ Increments 1–3: foundation, room browsing, and reservations. The five routes, 
 | /book | Book a Stay |
 | /bookings | My Bookings |
 
-Rooms now has six demo inventory units, date/guest/type/amenity filters, price sorting, availability, and a details dialog. Select an available room to review its stay summary. Guest details, live totals, reservation submission, and confirmation are implemented. Search/cancellation management and experience itineraries remain in later increments. All resort content is fictional; no real bookings or payments are made.
+Rooms now has six demo inventory units, date/guest/type/amenity filters, price sorting, availability, and a details dialog. Select an available room to review its stay summary. Guest details, live totals, reservation submission, and confirmation are implemented. Search, status filters, details, and cancellation are implemented. Experience itineraries and final Home content remain in Increment 5. All resort content is fictional; no real bookings or payments are made.
 
 ## Project references
 
@@ -74,6 +74,16 @@ Increment 2 verification passed in headless Edge, including invalid date/guest v
 3. Edit dates/guests and check the updated price. Submit incomplete/invalid fields to inspect inline feedback.
 4. Confirm the demo reservation. The receipt shows a unique reference, guest details, stay dates, quoted total, and optional requests. No payment is collected and no email is sent.
 5. Navigate to My bookings and use View confirmation to reopen the receipt in the same session. Revisit Rooms: an overlapping stay for that unit is unavailable.
-6. Full refresh/restart may clear reservations; missing receipt references have an explicit recovery message. Cancellation/search will be added in Increment 4.
+6. Full refresh/restart may clear reservations; missing receipt references have an explicit recovery message. Use My bookings to search, inspect, or cancel reservations with confirmation.
 
 Final Increment 3 build passed with zero warnings/errors. Direct state checks covered invalid data, immutable quotes, duplicate submission IDs, overlapping/adjacent stays, and concurrent attempts. Edge checks covered form validation, live totals, successful confirmation, double clicks, receipt requests, keyboard focus, in-session links, availability updates/error recovery, fresh sessions, and widths 320–1440. Impeccable review approved the scoped implementation.
+
+## Increment 4 walkthrough
+
+1. Create one or more demo reservations without refreshing the page; navigate to My bookings.
+2. Search by guest name, room, email, or reference. Combine search with Confirmed/Cancelled status, or clear the filters.
+3. View details to inspect the guest, dates, requests, status, and original quote. Open receipt shows the full page; Close or Escape dismisses the dialog.
+4. Cancel stay opens a confirmation. Keep reservation or Escape leaves the stay unchanged. Cancel reservation retains it in history with Cancelled status and releases its dates.
+5. Return to Rooms: the cancelled unit can be selected again unless another confirmed stay or illustrative hold overlaps. A new booking has a new reference; the cancelled entry remains in history.
+
+Final Increment 4 build passed with zero warnings/errors. Fifteen direct state checks covered history/quote preservation, repeat and unknown requests, current cancelled receipt replay, availability restoration, rebooking, independent holds, and concurrent cancellation. Eleven Edge checks covered search/status, details, safe dismissal, confirmed cancellation, feedback/counts, current receipts, and rebooking. Desktop/mobile dialog captures were taken after animations settled. Impeccable review approved the implementation. Records remain session-only; no payment/refund or email is processed.

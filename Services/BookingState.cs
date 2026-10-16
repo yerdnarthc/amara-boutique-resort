@@ -67,7 +67,7 @@ public sealed class BookingState
             // Idempotency: repeated events from one form return its original receipt.
             if (_submissions.TryGetValue(submissionId, out var previous))
             {
-                reservation = previous;
+                reservation = _reservations.First(item => item.Reference == previous.Reference);
                 return true;
             }
             var issues = new List<ValidationResult>();
@@ -96,6 +96,25 @@ public sealed class BookingState
             return true;
         }
     }
+    public bool TryCancel(string reference, out string? error)
+    {
+        lock (_reservationLock)
+        {
+            error = null;
+            var index = _reservations.FindIndex(item => item.Reference == reference);
+            if (index < 0) { error = "That reservation is no longer in this session."; return false; }
+            var current = _reservations[index];
+            if (current.Status == ReservationStatus.Cancelled)
+            {
+                error = "This reservation is already cancelled. No further change was made.";
+                return false;
+            }
+            // Retain the original quote and guest details; only confirmed stays block availability.
+            _reservations[index] = current with { Status = ReservationStatus.Cancelled };
+            return true;
+        }
+    }
+
     public static string Money(decimal amount) => $"USD {amount.ToString("N2", CultureInfo.InvariantCulture)}";
     private sealed record RoomHold(int RoomId, DateOnly CheckIn, DateOnly CheckOut);
 }
