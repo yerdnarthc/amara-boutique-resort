@@ -245,3 +245,46 @@ h1:focus { outline: none; }
     .booking-entry-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     .booking-entry-actions { flex-wrap: wrap; }
 }
+
+/* Increment 5: the stay search and experience collection */
+.home-search { margin-top: 64px; padding: 32px; border: 1px solid var(--line); border-radius: 12px; }
+.home-search h2, .section-heading h2, .home-experiences h2 { font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 400; line-height: 1.4; letter-spacing: -.025em; }
+.home-search p, .section-heading p, .home-experiences p { color: var(--muted); }
+.home-search form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; align-items: end; gap: 16px; margin-top: 24px; }
+.home-search form > .mud-button-root { min-height: 46px; }
+.home-featured { margin-top: 64px; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.home-featured-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.home-featured-card { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.home-featured-card img { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; }
+.home-featured-card > div { padding: 24px; }
+.home-featured-card h3 { font: 400 1.4rem/1.4 var(--heading); }
+.home-featured-card p { margin: 12px 0; color: var(--muted); }
+.home-featured-card span { font: 600 .8rem/1.5 var(--heading); }
+.home-experiences { margin-top: 64px; padding: 48px 0; border-block: 1px solid var(--line); }
+.home-experiences > div { max-width: 65ch; }
+.home-experiences p { margin: 16px 0; }
+.home-experiences + .welcome-strip { margin-top: 0; border-top: 0; }
+.experience-filters { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto; align-items: end; gap: 16px; padding-block: 24px; border-block: 1px solid var(--line); }
+.experience-filters > .mud-button-root { min-height: 46px; }
+.experience-results { margin: 28px 0 20px; font: 600 .9rem/1.5 var(--heading); }
+.experience-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.experience-card { display: flex; flex-direction: column; min-width: 0; min-height: 250px; padding: 28px; border: 1px solid var(--line); border-radius: 12px; }
+.experience-card-top { display: flex; align-items: center; gap: 12px; color: #5b6c43; font: 400 .75rem/1.5 var(--heading); }
+.experience-card h2 { margin-top: 20px; font: 400 1.45rem/1.4 var(--heading); }
+.experience-card p { margin: 12px 0 20px; color: var(--muted); }
+.experience-card > .mud-button-root { align-self: flex-start; margin-top: auto; }
+.experience-dialog-meta { color: #5b6c43; font: 600 .78rem/1.5 var(--heading); }
+.experience-itinerary { padding-left: 24px; margin: 12px 0 24px; }
+.experience-itinerary li { margin-block: 10px; padding-left: 4px; }
+@media (max-width: 960px) { .home-search form { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) {
+    .home-search, .home-featured, .home-experiences { margin-top: 40px; }
+    .home-search { padding: 24px; }
+    .home-search form, .home-featured-grid, .experience-grid { grid-template-columns: 1fr; }
+    .section-heading { align-items: flex-start; flex-direction: column; }
+    .home-experiences { padding-block: 32px; }
+    .experience-filters { grid-template-columns: 1fr 1fr; }
+    .experience-filters > .mud-button-root { grid-column: 1 / -1; justify-self: start; }
+}
+@media (max-width: 390px) { .experience-filters { grid-template-columns: 1fr; } .experience-filters > .mud-button-root { grid-column: auto; } }

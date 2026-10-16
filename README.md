@@ -23,7 +23,7 @@ dotnet --version
 
 ## Current stage
 
-Increments 1-4: foundation, room browsing, reservations, and booking management. The five routes, responsive navigation, Amara theme, locally hosted fonts/photo, shared page introductions/empty states, and branded error/not-found pages are implemented. Home has an initial branded composition; its final content is scheduled for Increment 5.
+Increments 1-5: foundation, room browsing, reservations, booking management, experiences, and completed Home. The five routes, responsive navigation, Amara theme, locally hosted fonts/photo, shared page introductions/empty states, and branded error/not-found pages are implemented. Home includes date and guest search, featured rooms, and an Experiences path.
 
 | Route | Screen |
 | --- | --- |
@@ -33,7 +33,7 @@ Increments 1-4: foundation, room browsing, reservations, and booking management.
 | /book | Book a Stay |
 | /bookings | My Bookings |
 
-Rooms now has six demo inventory units, date/guest/type/amenity filters, price sorting, availability, and a details dialog. Select an available room to review its stay summary. Guest details, live totals, reservation submission, and confirmation are implemented. Search, status filters, details, and cancellation are implemented. Experience itineraries and final Home content remain in Increment 5. All resort content is fictional; no real bookings or payments are made.
+Rooms now has six demo inventory units, date/guest/type/amenity filters, price sorting, availability, and a details dialog. Select an available room to review its stay summary. Guest details, live totals, reservation submission, and confirmation are implemented. Search, status filters, details, and cancellation are implemented. Experiences has six illustrative activities with search, category filters, and itinerary dialogs. All resort content is fictional; no real bookings or payments are made.
 
 ## Project references
 
@@ -87,3 +87,13 @@ Final Increment 3 build passed with zero warnings/errors. Direct state checks co
 5. Return to Rooms: the cancelled unit can be selected again unless another confirmed stay or illustrative hold overlaps. A new booking has a new reference; the cancelled entry remains in history.
 
 Final Increment 4 build passed with zero warnings/errors. Fifteen direct state checks covered history/quote preservation, repeat and unknown requests, current cancelled receipt replay, availability restoration, rebooking, independent holds, and concurrent cancellation. Eleven Edge checks covered search/status, details, safe dismissal, confirmed cancellation, feedback/counts, current receipts, and rebooking. Desktop/mobile dialog captures were taken after animations settled. Impeccable review approved the implementation. Records remain session-only; no payment/refund or email is processed.
+
+
+## Increment 5 walkthrough
+
+1. On Home, enter check-in, check-out, and guest count. Find rooms opens Rooms with those filters applied.
+2. Browse the featured room previews or follow the Experiences link.
+3. On Experiences, search by activity name or description and filter by Culture, Nature, or Adventure. Clear filters restores all six ideas; unmatched searches show an empty state.
+4. Open View itinerary for duration, steps, inclusions, and preparation guidance. No activity booking is made.
+
+Final Increment 5 build passed with zero warnings/errors. HTTP smoke checks confirmed Home and Experiences render, and Rooms receives selected dates and guest count. A browser was unavailable in this environment, so complete the interactive and responsive regression before presenting.

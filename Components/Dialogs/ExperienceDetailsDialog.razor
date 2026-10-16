@@ -1,0 +1,19 @@
+<MudDialog>
+    <DialogContent>
+        <p class="experience-dialog-meta">@Experience.Category · @Experience.Duration</p>
+        <p class="room-detail-description">@Experience.Description</p>
+        <h3 class="detail-subheading">Your itinerary</h3>
+        <ol class="experience-itinerary">@foreach (var step in Experience.Itinerary) { <li>@step</li> }</ol>
+        <h3 class="detail-subheading">Included</h3>
+        <ul class="detail-amenities">@foreach (var item in Experience.Inclusions) { <li>@item</li> }</ul>
+        <h3 class="detail-subheading">Before you go</h3>
+        <p>@Experience.Preparation</p>
+        <p class="session-note">Illustrative experience concept. No activity reservation is made here.</p>
+    </DialogContent>
+    <DialogActions><MudButton OnClick="() => Dialog.Cancel()">Close</MudButton></DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance Dialog { get; set; } = default!;
+    [Parameter, EditorRequired] public Experience Experience { get; set; } = default!;
+}
