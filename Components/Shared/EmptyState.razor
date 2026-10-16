@@ -1,0 +1,15 @@
+<section class="empty-state" aria-labelledby="@_headingId">
+    <MudIcon Icon="@Icon" Class="empty-state-icon" Size="Size.Large" />
+    <h2 id="@_headingId">@Title</h2>
+    <p>@Description</p>
+    <MudButton Href="@ActionHref" Color="Color.Primary" Variant="Variant.Filled" DropShadow="false">@ActionText</MudButton>
+</section>
+
+@code {
+    private readonly string _headingId = $"empty-{Guid.NewGuid():N}";
+    [Parameter, EditorRequired] public string Title { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string Description { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string ActionText { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string ActionHref { get; set; } = string.Empty;
+    [Parameter] public string Icon { get; set; } = Icons.Material.Outlined.Info;
+}
