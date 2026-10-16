@@ -1,0 +1,92 @@
+@page "/rooms"
+@inject BookingState Booking
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+
+<PageTitle>Rooms - Amara</PageTitle>
+<div class="rooms-page">
+    <PageIntro Title="Room to unwind." Description="A quiet corner for two or space for everyone. Choose your dates, find your room, and make the stay your own." />
+    <EditForm Model="_filters" OnValidSubmit="ApplyFilters" class="room-filters" FormName="room-search" novalidate>
+        <DataAnnotationsValidator />
+        <div class="filter-fields">
+            <div class="filter-field"><label for="check-in">Check-in</label><InputDate id="check-in" @bind-Value="_filters.CheckIn" min="@TodayIso" /><ValidationMessage For="() => _filters.CheckIn" /></div>
+            <div class="filter-field"><label for="check-out">Check-out</label><InputDate id="check-out" @bind-Value="_filters.CheckOut" min="@CheckOutMinimum" /><ValidationMessage For="() => _filters.CheckOut" /></div>
+            <div class="filter-field"><label for="guests">Guests</label><InputNumber id="guests" @bind-Value="_filters.Guests" min="1" max="6" /><ValidationMessage For="() => _filters.Guests" /></div>
+            <div class="filter-field"><label for="room-type">Room type</label><InputSelect id="room-type" @bind-Value="_filters.Type"><option value="">All rooms</option><option value="Standard">Standard</option><option value="Deluxe">Deluxe</option><option value="Suite">Suite</option></InputSelect></div>
+            <div class="filter-field filter-search"><label for="room-search">Search rooms</label><InputText id="room-search" @bind-Value="_filters.Search" placeholder="Name or amenity" /></div>
+        </div>
+        <div class="filter-actions">
+            <label class="available-toggle"><InputCheckbox @bind-Value="_filters.AvailableOnly" /> Available rooms only</label>
+            <div><MudButton ButtonType="ButtonType.Button" OnClick="ResetFilters">Reset filters</MudButton><MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" DropShadow="false">Apply filters</MudButton></div>
+        </div>
+    </EditForm>
+    <div class="room-results-bar">
+        <div aria-live="polite" role="status"><strong>@VisibleRooms.Count @(VisibleRooms.Count == 1 ? "room" : "rooms")</strong><p>@_applied.CheckIn.ToString("dd MMM yyyy") – @_applied.CheckOut.ToString("dd MMM yyyy") · @_applied.Guests @(_applied.Guests == 1 ? "guest" : "guests") · @_applied.Nights @(_applied.Nights == 1 ? "night" : "nights")</p></div>
+        <div class="sort-field"><label for="room-sort">Sort by</label><select id="room-sort" @bind="_sort"><option value="recommended">Recommended</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div>
+    </div>
+    <p class="inventory-note">Fictional room inventory. Rates are per room in USD; photos are illustrative. Apply filters to update your stay dates and availability.</p>
+    @if (VisibleRooms.Count == 0)
+    {
+        <section class="empty-state"><h2>No rooms match your stay</h2><p>Try fewer guests, a different room type, or new dates. You can also clear the filters to see the full collection.</p><MudButton Color="Color.Primary" Variant="Variant.Filled" DropShadow="false" OnClick="ResetFilters">Clear filters</MudButton></section>
+    }
+    else
+    {
+        <div class="room-grid">
+            @foreach (var room in VisibleRooms)
+            {
+                <RoomCard @key="room.Id" Room="room" Available="Booking.IsAvailable(room.Id, _applied.CheckIn, _applied.CheckOut)" OnDetails="ShowDetails" OnSelect="SelectRoom" />
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private RoomSearch _filters = new();
+    private RoomSearch _applied = new();
+    private string _sort = "recommended";
+    private string TodayIso => DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd");
+    private string CheckOutMinimum => (_filters.CheckIn < DateOnly.MaxValue ? _filters.CheckIn.AddDays(1) : _filters.CheckIn).ToString("yyyy-MM-dd");
+    private List<Room> VisibleRooms
+    {
+        get
+        {
+            var term = _applied.Search.Trim();
+            var rooms = Booking.Rooms.Where(room => room.Capacity >= _applied.Guests &&
+                (!_applied.Type.HasValue || room.Type == _applied.Type) &&
+                (term.Length == 0 || room.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                    room.Amenities.Any(amenity => amenity.Contains(term, StringComparison.OrdinalIgnoreCase))) &&
+                (!_applied.AvailableOnly || Booking.IsAvailable(room.Id, _applied.CheckIn, _applied.CheckOut)));
+            return (_sort switch
+            {
+                "price-low" => rooms.OrderBy(room => room.NightlyRate),
+                "price-high" => rooms.OrderByDescending(room => room.NightlyRate),
+                _ => rooms.OrderBy(room => room.Id)
+            }).ToList();
+        }
+    }
+    private void ApplyFilters() => _applied = _filters.Copy();
+    private void ResetFilters()
+    {
+        _filters = new();
+        _applied = _filters.Copy();
+        _sort = "recommended";
+    }
+    private void SelectRoom(Room room)
+    {
+        if (!Booking.IsAvailable(room.Id, _applied.CheckIn, _applied.CheckOut)) return;
+        Navigation.NavigateTo($"book?roomId={room.Id}&checkIn={_applied.CheckIn:yyyy-MM-dd}&checkOut={_applied.CheckOut:yyyy-MM-dd}&guests={_applied.Guests}");
+    }
+    private async Task ShowDetails(Room room)
+    {
+        var parameters = new DialogParameters<RoomDetailsDialog>
+        {
+            { dialog => dialog.Room, room },
+            { dialog => dialog.Search, _applied.Copy() },
+            { dialog => dialog.Available, Booking.IsAvailable(room.Id, _applied.CheckIn, _applied.CheckOut) }
+        };
+        var dialog = await DialogService.ShowAsync<RoomDetailsDialog>(room.Name, parameters,
+            new DialogOptions { CloseButton = true, CloseOnEscapeKey = true, FullWidth = true, MaxWidth = MaxWidth.Small });
+        var result = await dialog.Result;
+        if (result is { Canceled: false }) SelectRoom(room);
+    }
+}

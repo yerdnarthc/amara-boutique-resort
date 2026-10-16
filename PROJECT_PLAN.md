@@ -1,4 +1,4 @@
-﻿# Amara — Stays & Experiences
+# Amara — Stays & Experiences
 
 ## Purpose and project context
 
@@ -25,9 +25,9 @@ Keep architecture lightweight. Use mock/in-memory data. Add persistence, authent
 
 - Verified SDK: .NET 8.0.400.
 - No Blazor application or .csproj existed when this plan was created.
-- MudBlazor and Radzen are not installed in an application project yet.
-- Planning is complete; implementation has not started.
-- The next task is Increment 1 below.
+- MudBlazor 8.15.0 is installed and configured; Radzen is not used.
+- Increment 1 is implemented: .NET 8 Blazor foundation, responsive shell, and five working routes.
+- Increments 1-4 are implemented: foundation, room browsing, reservations, and booking management. Next: Increment 5, experiences and final polish.
 - The lab computer has administrator restrictions; prefer user-accessible tooling and existing installations.
 
 ## Skill references
@@ -107,7 +107,7 @@ Identity, title, category, duration, description, itinerary, inclusions, prepara
 
 Unique reference, selected room identity, guest name/email/contact, check-in/check-out dates, guest count, quoted nightly rate, total, and status (Confirmed or Cancelled).
 
-Use C# decimal for money. Choose and label one display currency consistently during implementation; no currency was fixed during planning.
+Use C# decimal for money. Demo room rates use USD consistently. Prices are illustrative and do not represent a real property.
 
 ## Booking rules
 
@@ -162,10 +162,10 @@ Useful components include RoomCard, ExperienceCard, EmptyState, and reservation/
 | 4. Booking management | Shared reservation list, search, details, cancellation | New reservations appear; cancelled bookings release availability |
 | 5. Tourism and polish | Experience catalog, itineraries, completed Home, responsive/empty states | Complete guest journey and experience browsing work across all five screens |
 
-- [ ] Increment 1 complete
-- [ ] Increment 2 complete
-- [ ] Increment 3 complete
-- [ ] Increment 4 complete
+- [x] Increment 1 complete
+- [x] Increment 2 complete
+- [x] Increment 3 complete
+- [x] Increment 4 complete
 - [ ] Increment 5 complete
 
 Build after each meaningful increment. Inspect and fix compilation errors before adding optional polish. Update this checklist and record material decisions below as implementation progresses.
@@ -190,4 +190,48 @@ Verify:
 ## Decision and progress log
 
 - Initial plan: five-screen resort booking and local experience website, using .NET 8, MudBlazor, mock data, and Anthropic-inspired palette/typography.
-- Current next action: implement Increment 1, the foundation and branded layout.
+- Increment 1 complete on feature/amara-foundation. Build: zero warnings/errors. Edge checks: five routes, 404 fallback, local assets, responsive overflow, mobile menu. Next: Increment 2, room browsing.
+
+## Impeccable design guidance
+
+The full official Impeccable skill is installed at [.agents/skills/impeccable/SKILL.md](.agents/skills/impeccable/SKILL.md). Use it for design, UI/UX, accessibility, responsive behavior, and clear interface copy throughout the increments above. Its quality guidance complements the existing hospitality skills and the selected Anthropic brand identity; preserve this plan's C#/Blazor stack and exam scope.
+
+See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, all included commands, Windows launcher usage, Codex hook activation, verification, and limitations. Before the first UI implementation, initialize its product context from this plan and follow its new-work guidance. PRODUCT.md now records the approved product context; DESIGN.md records the implemented foundation design system.
+
+### Increment 2 completion
+
+- Branch: feature/amara-room-browsing.
+- Added Room/RoomType and RoomSearch models, scoped BookingState inventory, RoomCard, and RoomDetailsDialog.
+- Six individually reservable demo rooms with local illustrative photographs; rates use USD.
+- Filters apply as a validated snapshot: dates, guest capacity, type, name/amenity search, and available-only. Price sorting applies immediately.
+- Sample availability holds: Garden Room from today + 2 to today + 4; Family Deluxe from today + 5 to today + 7. These are illustrative date holds, not customer reservations. Same-day checkout/check-in is allowed.
+- Selecting a room carries its ID, ISO dates, and guest count in the booking URL. The summary revalidates parameters and availability, shows nights/rate/total, and survives refresh. Selecting does not reserve inventory.
+- Verification: build zero warnings/errors; Edge checks passed combined filters, sort directions, empty/reset states, invalid dates/guests, date overlaps/adjacent boundaries, dialog Escape/selection, one/two-night totals, URL tampering, refreshed selection, and widths 320/390/760/960/1440. No browser errors.
+- Impeccable review: ship within Increment 2 scope. Static detector advisories include standalone Razor stylesheet-resolution limits and an approved brand border color, documented in the design-system extension.
+- Next: Increment 3 guest form, validation, submission, and confirmation. Integrate real in-memory reservations with the availability calculation; retain sample holds as clearly labeled demo data or replace them consistently.
+### Increment 3 completion
+
+- Branch: feature/amara-reservation-flow.
+- Added ReservationForm with DataAnnotations and cross-field date validation, plus immutable Reservation snapshots.
+- Book a Stay now accepts lead guest name, email, phone, optional requests, editable dates, and guest count. Its summary updates nights and total as valid values change.
+- Submission validates the model and room capacity again in BookingState. Availability checking and insertion use one lock; a per-form submission ID returns the original receipt on repeated events.
+- Confirmed session reservations are included in room availability, alongside the illustrative sample holds. Quoted rates and guest details are copied into the receipt.
+- Confirmation includes reference, guest/contact details, dates, requests, status, nightly rate, and total. Keyboard focus moves to the success heading. No email or payment is processed.
+- Minimal My Bookings links keep confirmations reachable within the same interactive session. Search, richer management, and cancellation remain Increment 4.
+- Full refresh/new session can clear reservations. An unavailable confirmation reference shows a recovery message rather than recreating or pretending to restore a reservation. Guest details are never placed in the URL.
+- Verification: final build zero warnings/errors. Fifteen direct state checks passed validation, snapshot pricing, repeated events, overlaps, adjacent dates, atomic concurrent attempts, and session isolation. Edge checks passed required fields/contact/capacity/date validation, live totals, double-click protection, receipt requests, in-session navigation, room availability updates, recoverable availability rechecks, fresh-session behavior, focus, and widths 320–1440.
+- Impeccable finish review: ship within Increment 3 scope. Only known standalone Razor stylesheet-resolution advisories appeared in the detector.
+- Next: Increment 4 reservation search, details/management, confirmation before cancellation, and releasing cancelled room availability.
+
+### Increment 4 completion
+
+- Branch: feature/amara-booking-management.
+- My Bookings now searches guest name, room, email, and reference (case-insensitive, with outer whitespace trimmed). Search combines with All/Confirmed/Cancelled filters; clear/no-match and empty-session states are provided.
+- Responsive rows show room, guest, reference, stay dates, total/original quote, status, and actions. Details reuse the receipt in a scrollable dialog, with an Open receipt action.
+- Cancel stay opens an explicit confirmation dialog identifying the reservation. Keep reservation, close, or Escape dismiss without cancelling; backdrop clicks cannot confirm cancellation.
+- TryCancel updates status atomically and preserves the original quote, guest snapshot, reference, and history. Repeated/unknown cancellation requests are safely rejected. Only confirmed stays block room availability; unrelated sample holds and other confirmed reservations remain effective.
+- Replay of the old submission ID returns the current cancelled receipt and cannot resurrect a stay. A new submission can book the released dates with a new reference.
+- Written feedback reports successful cancellation, active filters/counts update, and cancelled rows disable repeated cancellation. Full receipts show a cancelled heading/icon/status rather than stale confirmation.
+- Verification: build zero warnings/errors; 15 direct state checks and 11 Edge flow checks passed, including combined search/status, details/dismissal, confirmation, retained history, cancelled receipts, restored availability, and rebooking. No browser errors; widths 320/390/760/960/1440 had no horizontal overflow.
+- Dialog captures were repeated after entrance animations settled: identity transforms, 600px desktop and 326px at a 390px viewport, with 14.4px fact text. Impeccable review: ship, no material fixes.
+- Next: Increment 5, local experience catalog and itineraries, completed Home content, and final responsive/empty-state polish. Persistence remains session-only.

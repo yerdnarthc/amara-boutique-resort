@@ -1,0 +1,21 @@
+<MudDialog>
+    <DialogContent>
+        <p class="cancel-intro">You are cancelling <strong>@Reservation.RoomName</strong> for <strong>@Reservation.GuestName</strong>.</p>
+        <dl class="stay-facts">
+            <div><dt>Reference</dt><dd class="cancel-reference">@Reservation.Reference</dd></div>
+            <div><dt>Stay dates</dt><dd>@Reservation.CheckIn.ToString("dd MMM yyyy") to @Reservation.CheckOut.ToString("dd MMM yyyy")</dd></div>
+        </dl>
+        <p>This will release the room for your dates. The cancelled reservation will stay in your history. To stay again, you will need to make a new reservation.</p>
+        <p class="session-note">This is a demo reservation; no payment was collected.</p>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Default" OnClick="Keep">Keep reservation</MudButton>
+        <MudButton Color="Color.Default" Variant="Variant.Filled" DropShadow="false" Class="confirm-cancel" OnClick="Confirm">Cancel reservation</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] private IMudDialogInstance Dialog { get; set; } = default!;
+    [Parameter, EditorRequired] public Reservation Reservation { get; set; } = default!;
+    private void Keep() => Dialog.Cancel();
+    private void Confirm() => Dialog.Close(DialogResult.Ok(true));
+}

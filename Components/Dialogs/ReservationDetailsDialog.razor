@@ -1,0 +1,9 @@
+<MudDialog Class="reservation-details-dialog">
+    <DialogContent><ReservationReceipt Reservation="Reservation" ShowActions="false" /></DialogContent>
+    <DialogActions><MudButton Href="@($"book?reference={Reservation.Reference}")" Color="Color.Default" OnClick="Close">Open receipt</MudButton><MudButton Color="Color.Default" OnClick="Close">Close details</MudButton></DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] private IMudDialogInstance Dialog { get; set; } = default!;
+    [Parameter, EditorRequired] public Reservation Reservation { get; set; } = default!;
+    private void Close() => Dialog.Cancel();
+}
