@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.ComponentModel.DataAnnotations;
 using Amara.Models;
 
 namespace Amara.Services;
@@ -32,22 +33,69 @@ public sealed class BookingState
             ["Wi-Fi", "Air conditioning", "Two bedrooms", "Shared lounge"])
     ]);
 
-    // Illustrative existing stays make date-based availability observable.
-    // Integrate actual in-memory reservations here in the reservation increment.
+    // Illustrative holds remain separate from guest-created session reservations.
     private readonly List<RoomHold> _sampleHolds =
     [
         new(1, DateOnly.FromDateTime(DateTime.Today).AddDays(2), DateOnly.FromDateTime(DateTime.Today).AddDays(4)),
         new(4, DateOnly.FromDateTime(DateTime.Today).AddDays(5), DateOnly.FromDateTime(DateTime.Today).AddDays(7))
     ];
-
+    private readonly object _reservationLock = new();
+    private readonly List<Reservation> _reservations = [];
+    private readonly Dictionary<Guid, Reservation> _submissions = [];
+    public IReadOnlyList<Reservation> Reservations
+    {
+        get { lock (_reservationLock) return _reservations.ToArray(); }
+    }
+    public Reservation? FindReservation(string reference)
+    {
+        lock (_reservationLock) return _reservations.FirstOrDefault(item => item.Reference == reference);
+    }
     public Room? FindRoom(int id) => Rooms.FirstOrDefault(room => room.Id == id);
-
-    public bool IsAvailable(int roomId, DateOnly checkIn, DateOnly checkOut) =>
-        FindRoom(roomId) is not null && checkOut > checkIn &&
-        !_sampleHolds.Any(stay => stay.RoomId == roomId &&
-            checkIn < stay.CheckOut && checkOut > stay.CheckIn);
-
+    public bool IsAvailable(int roomId, DateOnly checkIn, DateOnly checkOut)
+    {
+        lock (_reservationLock)
+            return FindRoom(roomId) is not null && checkOut > checkIn &&
+                !_sampleHolds.Any(stay => stay.RoomId == roomId && checkIn < stay.CheckOut && checkOut > stay.CheckIn) &&
+                !_reservations.Any(stay => stay.RoomId == roomId && stay.Status == ReservationStatus.Confirmed && checkIn < stay.CheckOut && checkOut > stay.CheckIn);
+    }
+    public bool TryReserve(Guid submissionId, int roomId, ReservationForm form, out Reservation? reservation, out string? error)
+    {
+        lock (_reservationLock)
+        {
+            reservation = null;
+            error = null;
+            // Idempotency: repeated events from one form return its original receipt.
+            if (_submissions.TryGetValue(submissionId, out var previous))
+            {
+                reservation = previous;
+                return true;
+            }
+            var issues = new List<ValidationResult>();
+            if (!Validator.TryValidateObject(form, new ValidationContext(form), issues, validateAllProperties: true))
+            {
+                error = issues.First().ErrorMessage ?? "Check your guest details and dates, then try again.";
+                return false;
+            }
+            var room = FindRoom(roomId);
+            if (room is null || form.Guests > room.Capacity)
+            {
+                error = "The selected room cannot accommodate this guest count. Choose another room or fewer guests.";
+                return false;
+            }
+            // Availability recheck and insertion are atomic within this session.
+            if (!IsAvailable(roomId, form.CheckIn, form.CheckOut))
+            {
+                error = "This room is no longer available for those dates. Change your dates or choose another room.";
+                return false;
+            }
+            reservation = new Reservation("AMR-" + Guid.NewGuid().ToString("N")[..12].ToUpperInvariant(),
+                room.Id, room.Name, form.GuestName.Trim(), form.Email.Trim(), form.Phone.Trim(), (form.SpecialRequests ?? string.Empty).Trim(),
+                form.CheckIn, form.CheckOut, form.Guests, room.NightlyRate, room.NightlyRate * form.Nights, DateTimeOffset.UtcNow);
+            _reservations.Add(reservation);
+            _submissions.Add(submissionId, reservation);
+            return true;
+        }
+    }
     public static string Money(decimal amount) => $"USD {amount.ToString("N2", CultureInfo.InvariantCulture)}";
-
     private sealed record RoomHold(int RoomId, DateOnly CheckIn, DateOnly CheckOut);
 }
