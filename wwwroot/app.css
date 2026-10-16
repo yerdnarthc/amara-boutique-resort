@@ -87,14 +87,20 @@ main:focus { outline: none; }
     .empty-state { padding: 32px 20px; }
     .site-footer { align-items: flex-start; flex-direction: column; gap: 12px; }
 }
-/* Amara motion: purposeful Operate feedback + one authored confirmation arrival.
-   Thesis — Focal: booking confirmation receipt arrival (650ms, exponential ease-out, from visible default).
-   Continuity: filter/sort/search grid enter, card -> dialog, form -> receipt, nav between screens (entrance only; exit is instant/faster).
-   Feedback: press 100-150ms, field/alert/status 150-300ms, layout/overlay 300-500ms. Ease: cubic-bezier(0.16,1,0.3,1), no bounce/elastic.
-   Material: transform + opacity base, plus bounded blur for focal/dialog focus only. Stagger capped (40ms steps, 200ms max) for real lists only.
-   CSS keyframes/transitions only. No width/height/top/left/margin animation. No new dependency. InteractiveServer-safe (no JS).
+/* Amara motion: Living Resort — choreographed entrances on all 5 screens + slow ambience.
+   Thesis — Focal: Home hero breathing (750ms clip unveil + 26s drift + sun turn) and booking confirmation receipt (650ms).
+   Continuity per screen (never one identical entrance):
+   Home = copy rise -> photo clip unveil -> search -> featured cascade -> experiences -> welcome.
+   Rooms = intro -> filters (field stagger) -> results bar -> grid cascade (clip + rise + bounded blur) + photo unveil.
+   Experiences = intro -> filters -> results -> lateral drift cards (odd from right, even from left) + icon pop.
+   Book = split — guest form from left, summary from right + photo unveil; receipt keeps focal authorship.
+   Bookings = filters -> count -> ledger rows (X+Y drift cascade).
+   Feedback: press 100-150ms, field/alert/status 150-300ms, layout/overlay 300-500ms, focal 500-750ms.
+   Ease: cubic-bezier(0.16,1,0.3,1), no bounce/elastic. Ambience uses linear/sine alternates only.
+   Material: transform + opacity base, plus bounded blur (4-6px) and clip-path unveil on photos/dialogs/cards only.
+   Stagger capped (60ms steps, 300ms max) for real lists only. CSS keyframes/transitions only. No new dependency. InteractiveServer-safe (no JS).
    Content is visible by default; animations use backwards fill so failed CSS keeps content readable. */
-:root { --amara-ease: cubic-bezier(0.16, 1, 0.3, 1); }
+:root { --amara-ease: cubic-bezier(0.16, 1, 0.3, 1); --amara-drift: ease-in-out; }
 
 /* Base control feedback: acknowledge presses without layout movement. */
 .mud-button-root, .site-navigation > a, .text-link, .menu-toggle {
@@ -117,43 +123,176 @@ main:focus { outline: none; }
 .validation-message { animation: amara-field-note 200ms var(--amara-ease) backwards; }
 @keyframes amara-field-note { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
-/* Nav continuity between the 5 screens: quiet 300ms arrival, never blocking. Exit is instant (faster than entrance). */
+/* Choreographed entrances: header downbeat, page shells, intro, bands, then per-screen containers. Exit is instant (faster than entrance). */
+.site-header {
+    animation: amara-header-in 450ms var(--amara-ease) backwards;
+}
+.site-navigation > a {
+    animation: amara-nav-link-in 400ms var(--amara-ease) backwards;
+}
+.site-navigation > a:nth-child(2) { animation-delay: 40ms; }
+.site-navigation > a:nth-child(3) { animation-delay: 80ms; }
+.site-navigation > a:nth-child(4) { animation-delay: 120ms; }
+.site-navigation > a:nth-child(5) { animation-delay: 160ms; }
+@keyframes amara-header-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+@keyframes amara-nav-link-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
 .home-hero, .rooms-page, .page-container {
     animation: amara-page-in 300ms var(--amara-ease) backwards;
 }
 @keyframes amara-page-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-/* Filter/sort/search -> grid continuity: enter animation for real list items only. Sort reorder preserves DOM nodes (fast Operate); count regions update via polite live regions. */
-.room-grid > *, .experience-grid > *, .home-featured-pair > * {
-    animation: amara-card-in 350ms var(--amara-ease) backwards;
+/* PageIntro is the downbeat of Rooms / Experiences / Book / Bookings. Title first, description follows. */
+.page-intro > * {
+    animation: amara-intro-rise 450ms var(--amara-ease) backwards;
 }
-.managed-bookings > * { animation: amara-row-in 320ms var(--amara-ease) backwards; }
+.page-intro > p { animation-delay: 80ms; }
+@keyframes amara-intro-rise {
+    from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* Filter/search bands arrive as one band; fields cascade inside with small 8px rises. */
+.room-filters, .experience-filters, .booking-filters {
+    animation: amara-band-in 400ms var(--amara-ease) backwards;
+    animation-delay: 120ms;
+}
+.room-filters .filter-field, .experience-filters .filter-field, .booking-filters .filter-field {
+    animation: amara-field-rise 400ms var(--amara-ease) backwards;
+}
+.room-filters .filter-field:nth-child(1), .experience-filters .filter-field:nth-child(1), .booking-filters .filter-field:nth-child(1) { animation-delay: 140ms; }
+.room-filters .filter-field:nth-child(2), .experience-filters .filter-field:nth-child(2), .booking-filters .filter-field:nth-child(2) { animation-delay: 180ms; }
+.room-filters .filter-field:nth-child(3), .experience-filters .filter-field:nth-child(3) { animation-delay: 220ms; }
+.room-filters .filter-field:nth-child(4) { animation-delay: 260ms; }
+.room-filters .filter-field:nth-child(5) { animation-delay: 300ms; }
+@keyframes amara-band-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+}
+@keyframes amara-field-rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* Rooms: bottom cascade with clip unveil + bounded blur; photos unveil inside. */
+.room-grid > * {
+    animation: amara-card-unveil 500ms var(--amara-ease) backwards;
+}
+.room-grid > *:nth-child(2) { animation-delay: 60ms; }
+.room-grid > *:nth-child(3) { animation-delay: 120ms; }
+.room-grid > *:nth-child(4) { animation-delay: 180ms; }
+.room-grid > *:nth-child(5) { animation-delay: 240ms; }
+.room-grid > *:nth-child(n+6) { animation-delay: 300ms; }
+@keyframes amara-card-unveil {
+    from { opacity: 0; transform: translateY(16px) scale(0.99); clip-path: inset(6% 4% 6% 4% round 12px); filter: blur(4px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; clip-path: inset(0 0 0 0 round 12px); filter: blur(0); }
+}
+.room-card .room-photo {
+    animation: amara-photo-unveil 600ms var(--amara-ease) backwards;
+    animation-delay: 80ms;
+}
+@keyframes amara-photo-unveil {
+    from { opacity: 0; transform: scale(1.04); clip-path: inset(8% 6% 8% 6% round 8px); }
+    to { opacity: 1; transform: scale(1); clip-path: inset(0 0 0 0 round 8px); }
+}
+
+/* Experiences: lateral drift — odd from the right, even from the left — plus icon pop. */
+.experience-grid > *:nth-child(odd) {
+    animation: amara-drift-right 500ms var(--amara-ease) backwards;
+}
+.experience-grid > *:nth-child(even) {
+    animation: amara-drift-left 500ms var(--amara-ease) backwards;
+}
+.experience-grid > *:nth-child(2) { animation-delay: 60ms; }
+.experience-grid > *:nth-child(3) { animation-delay: 120ms; }
+.experience-grid > *:nth-child(4) { animation-delay: 180ms; }
+.experience-grid > *:nth-child(5) { animation-delay: 240ms; }
+.experience-grid > *:nth-child(n+6) { animation-delay: 300ms; }
+@keyframes amara-drift-right {
+    from { opacity: 0; transform: translateX(18px) translateY(10px); filter: blur(4px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes amara-drift-left {
+    from { opacity: 0; transform: translateX(-18px) translateY(10px); filter: blur(4px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+.experience-card-top .mud-icon-root {
+    animation: amara-icon-pop 450ms var(--amara-ease) backwards, amara-icon-breathe 7s var(--amara-drift) infinite alternate;
+    animation-delay: 120ms, 650ms;
+}
+@keyframes amara-icon-pop {
+    from { opacity: 0; transform: scale(0.7) translateY(6px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes amara-icon-breathe {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+}
+
+/* Book: split — form from the left, summary from the right, photo unveils inside. */
+.booking-layout .guest-form {
+    animation: amara-split-left 500ms var(--amara-ease) backwards;
+    animation-delay: 140ms;
+}
+.booking-layout .booking-summary {
+    animation: amara-split-right 550ms var(--amara-ease) backwards;
+    animation-delay: 220ms;
+}
+.booking-summary > img {
+    animation: amara-photo-unveil 600ms var(--amara-ease) backwards;
+    animation-delay: 260ms;
+}
+@keyframes amara-split-left {
+    from { opacity: 0; transform: translateX(-18px) translateY(8px); filter: blur(4px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes amara-split-right {
+    from { opacity: 0; transform: translateX(18px) translateY(8px); filter: blur(4px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* Bookings: ledger rows drift in from the left with a small downward settle. */
+.managed-bookings > * { animation: amara-ledger-in 450ms var(--amara-ease) backwards; }
+.managed-bookings > *:nth-child(2) { animation-delay: 60ms; }
+.managed-bookings > *:nth-child(3) { animation-delay: 120ms; }
+.managed-bookings > *:nth-child(4) { animation-delay: 180ms; }
+.managed-bookings > *:nth-child(5) { animation-delay: 240ms; }
+.managed-bookings > *:nth-child(n+6) { animation-delay: 300ms; }
+@keyframes amara-ledger-in {
+    from { opacity: 0; transform: translateX(-14px) translateY(10px); filter: blur(3px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
 .room-grid > *, .experience-grid > *, .managed-bookings > *, .home-featured-room {
     transition: opacity 200ms ease-out, transform 200ms ease-out, border-color 200ms ease-out;
 }
-/* Capped stagger: 40ms steps, 200ms total max. Beyond 6 items, no added delay. */
-.room-grid > *:nth-child(2), .experience-grid > *:nth-child(2), .managed-bookings > *:nth-child(2), .home-featured-pair > *:nth-child(2) { animation-delay: 40ms; }
-.room-grid > *:nth-child(3), .experience-grid > *:nth-child(3), .managed-bookings > *:nth-child(3) { animation-delay: 80ms; }
-.room-grid > *:nth-child(4), .experience-grid > *:nth-child(4), .managed-bookings > *:nth-child(4) { animation-delay: 120ms; }
-.room-grid > *:nth-child(5), .experience-grid > *:nth-child(5), .managed-bookings > *:nth-child(5) { animation-delay: 160ms; }
-.room-grid > *:nth-child(n+6), .experience-grid > *:nth-child(n+6), .managed-bookings > *:nth-child(n+6) { animation-delay: 200ms; }
-@keyframes amara-card-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-@keyframes amara-row-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 /* Result counts and availability text: color/opacity only, keeps sort legible without FLIP JS. */
 .booking-result-count, .experience-results, .room-results-bar, .availability, .reservation-status {
     transition: opacity 200ms ease-out, color 200ms ease-out;
 }
+.room-results-bar, .experience-results, .booking-result-count {
+    animation: amara-count-in 350ms var(--amara-ease) backwards;
+    animation-delay: 180ms;
+}
+@keyframes amara-count-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-/* Card -> dialog continuity: MudBlazor overlay fades, dialog surface + inner content arrive 300-350ms. Close is MudBlazor's own faster dismiss. */
+/* Card -> dialog continuity: overlay fades, dialog surface morphs from a small settle + scale, inner content follows. */
 .mud-overlay.mud-overlay-dialog { transition: opacity 250ms ease-out; }
-.mud-dialog { animation: amara-dialog-in 350ms var(--amara-ease) backwards; }
+.mud-dialog { animation: amara-dialog-in 380ms var(--amara-ease) backwards; }
 .mud-dialog .dialog-room-photo, .mud-dialog .experience-detail, .mud-dialog .reservation-receipt, .mud-dialog .cancel-intro, .mud-dialog .stay-facts {
     animation: amara-dialog-content 350ms var(--amara-ease) backwards;
 }
 .mud-dialog .dialog-room-photo { animation-delay: 40ms; }
 @keyframes amara-dialog-in {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: none; }
+    from { opacity: 0; transform: translateY(14px) scale(0.98); filter: blur(5px); }
+    60% { filter: blur(0); }
+    to { opacity: 1; transform: none; filter: blur(0); }
 }
 @keyframes amara-dialog-content {
     from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
@@ -210,10 +349,20 @@ main:focus { outline: none; }
 .amara-skeleton-text { border-radius: 8px; min-height: 16px; }
 @keyframes amara-shimmer { to { transform: translateX(100%); } }
 
-/* Reduced motion: remove spatial movement and blur, keep opacity/color/state meaning. Focus order and keyboard paths unchanged. */
+/* Reduced motion: remove spatial movement, blur, drift, grain, and scroll reveals; keep opacity/color/state meaning. Focus order and keyboard paths unchanged. */
 @media (prefers-reduced-motion: reduce) {
+    .site-header, .site-navigation > a,
     .home-hero, .rooms-page, .page-container,
-    .room-grid > *, .experience-grid > *, .managed-bookings > *, .home-featured-pair > *,
+    .page-intro > *,
+    .room-filters, .experience-filters, .booking-filters,
+    .room-filters .filter-field, .experience-filters .filter-field, .booking-filters .filter-field,
+    .room-grid > *, .room-card .room-photo, .experience-grid > *, .experience-card-top .mud-icon-root,
+    .managed-bookings > *, .home-featured-pair > *,
+    .booking-layout .guest-form, .booking-layout .booking-summary, .booking-summary > img,
+    .room-results-bar, .experience-results, .booking-result-count,
+    .home-hero .hero-copy > *, .home-hero .hero-image, .hero-image img, .hero-note .mud-icon-root,
+    .home-search, .home-featured, .home-featured-room, .home-featured-room > img,
+    .home-experiences, .welcome-strip, body::before,
     .mud-dialog, .mud-dialog .dialog-room-photo, .mud-dialog .experience-detail,
     .mud-dialog .reservation-receipt, .mud-dialog .cancel-intro, .mud-dialog .stay-facts,
     .page-container .reservation-receipt, .page-container .reservation-receipt .receipt-icon,
@@ -231,6 +380,8 @@ main:focus { outline: none; }
     .mud-button-root:active:not(:disabled), .menu-toggle:active:not(:disabled),
     .site-navigation > a:active, .text-link:active { transform: none !important; }
     .amara-skeleton::after { animation: none !important; opacity: 0.5; transform: none; }
+    .hero-image img, .home-featured-room:hover, .home-featured-room:hover > img,
+    .room-card:hover, .experience-card:hover { transform: none !important; }
 }
 @keyframes amara-reduced-fade { from { opacity: 0; } to { opacity: 1; } }
 h1:focus { outline: none; }
@@ -450,12 +601,14 @@ h1:focus { outline: none; }
 }
 @media (max-width: 390px) { .experience-filters { grid-template-columns: 1fr; } .experience-filters > .mud-button-root { grid-column: auto; } }
 
-/* Home ambience — Living resort (Persuade focal for Home only).
+/* Home choreography + Living Resort ambience (Persuade focal for Home only).
    Delight thesis: the resort breathes slowly around you, so slowness feels real.
-   Focal: 650-750ms hero arrival from visible default (rise + clip unveil, bounded 4px blur).
-   Continuity: search focus-within border, featured hover lift (transform only).
-   Ambience: 26s hero drift + 28s sun turn, transform only, infinite but cheap.
-   Budget: no layout-property animation, no new dependency, Blazor Server-safe CSS only. */
+   Sequence: hero copy rise (staggered) -> photo clip unveil -> search band -> featured cascade -> experiences -> welcome.
+   Ambience (all transform/opacity only, Blazor Server-safe CSS):
+   26s hero drift, 28s sun turn, 7s experience icon breathe, 9s paper-grain breathe (opacity only, 0.035-0.06),
+   hover photography (scale 1.03, lift -4px), primary button lift (-1px, no shadow to keep quiet surfaces).
+   Below-fold sections also unveil on scroll when animation-timeline is supported; otherwise they use the load cascade fallback.
+   Budget: no layout-property animation, no new dependency. Blur bounded 4px on entrances only. */
 .home-hero { animation: none; }
 .home-hero .hero-copy > * { animation: amara-home-rise 650ms var(--amara-ease) backwards; }
 .home-hero .hero-copy h1 { animation-delay: 20ms; }
@@ -473,17 +626,89 @@ h1:focus { outline: none; }
     to { opacity: 1; transform: none; clip-path: inset(0 0 0 0 round 12px); }
 }
 .hero-image { overflow: clip; border-radius: 12px; }
-.hero-image img { border-radius: 12px; animation: amara-hero-drift 26s ease-in-out infinite alternate; }
+.hero-image img {
+    border-radius: 12px;
+    animation: amara-hero-drift 26s var(--amara-drift) infinite alternate;
+    will-change: transform;
+}
 @keyframes amara-hero-drift { from { transform: scale(1); } to { transform: scale(1.06); } }
 .hero-note .mud-icon-root { display: inline-flex; animation: amara-sun-turn 28s linear infinite; }
 @keyframes amara-sun-turn { to { transform: rotate(360deg); } }
-.home-search { transition: border-color 200ms ease-out; }
+
+/* Paper grain: barely-there SVG turbulence breathing via opacity only. Restrained by design. */
+body::before {
+    content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    animation: amara-grain-breathe 9s var(--amara-drift) infinite alternate;
+}
+.site-frame { position: relative; z-index: 1; }
+@keyframes amara-grain-breathe { from { opacity: 0.035; } to { opacity: 0.06; } }
+
+/* Home container cascade after the hero: search -> featured -> experiences -> welcome. */
+.home-search {
+    transition: border-color 200ms ease-out;
+    animation: amara-band-in 500ms var(--amara-ease) backwards;
+    animation-delay: 320ms;
+}
 .home-search:focus-within { border-color: #788c5d; }
-.home-search-live { margin: 16px 0 0; font: 400 .8rem/1.6 var(--heading); color: #5b6c43; }
+.home-search .filter-field { animation: amara-field-rise 400ms var(--amara-ease) backwards; }
+.home-search .filter-field:nth-child(1) { animation-delay: 340ms; }
+.home-search .filter-field:nth-child(2) { animation-delay: 380ms; }
+.home-search .filter-field:nth-child(3) { animation-delay: 420ms; }
+.home-search-live { margin: 16px 0 0; font: 400 .8rem/1.6 var(--heading); color: #5b6c43; animation: amara-count-in 350ms var(--amara-ease) backwards; animation-delay: 460ms; }
+.home-featured {
+    animation: amara-home-section 550ms var(--amara-ease) backwards;
+    animation-delay: 380ms;
+}
+.home-featured-pair > * {
+    animation: amara-card-unveil 550ms var(--amara-ease) backwards;
+}
+.home-featured-pair > *:nth-child(2) { animation-delay: 440ms; }
+.home-featured-pair > *:nth-child(1) { animation-delay: 380ms; }
+@keyframes amara-home-section {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+}
+.home-experiences {
+    animation: amara-home-section 550ms var(--amara-ease) backwards;
+    animation-delay: 420ms;
+}
+.welcome-strip {
+    animation: amara-home-section 550ms var(--amara-ease) backwards;
+    animation-delay: 460ms;
+}
+
+/* Scroll-driven unveil for below-fold Home sections: same rise, tied to scroll position when supported. */
+@supports (animation-timeline: view()) {
+    .home-featured, .home-experiences, .welcome-strip {
+        animation: amara-scroll-rise 600ms var(--amara-ease) backwards;
+        animation-timeline: view();
+        animation-range: entry 0% cover 28%;
+    }
+    @keyframes amara-scroll-rise {
+        from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+        60% { filter: blur(0); }
+        to { opacity: 1; transform: none; filter: blur(0); }
+    }
+}
+
+/* Photography ambition: hover scale is transform-only; featured lift keeps flat quiet surfaces (no shadow). */
 .home-featured-room { transition: opacity 200ms ease-out, transform 200ms ease-out, border-color 200ms ease-out; }
 .home-featured-room:hover { transform: translateY(-4px); border-color: #b0aea5; }
-.home-featured-room > img { transition: transform 500ms var(--amara-ease); }
+.home-featured-room > img {
+    transition: transform 500ms var(--amara-ease);
+    animation: amara-featured-unveil 600ms var(--amara-ease) backwards;
+    animation-delay: 400ms;
+}
 .home-featured-room:hover > img { transform: scale(1.03); }
+.room-card { transition: opacity 200ms ease-out, transform 200ms ease-out, border-color 200ms ease-out; }
+.room-card:hover { transform: translateY(-3px); border-color: #b0aea5; }
+.room-card:hover .room-photo { transform: scale(1.02); }
+.room-card .room-photo { transition: transform 500ms var(--amara-ease); }
+.experience-card { transition: opacity 200ms ease-out, transform 200ms ease-out, border-color 200ms ease-out; }
+.experience-card:hover { transform: translateY(-3px); border-color: #b0aea5; }
+.mud-button-filled-primary:hover:not(:disabled) { transform: translateY(-1px); }
+.mud-button-filled-primary:active:not(:disabled) { transform: scale(0.98) translateY(0); }
 @media (prefers-reduced-motion: reduce) {
     .home-hero .hero-copy > *, .home-hero .hero-image, .hero-image img, .hero-note .mud-icon-root {
         animation: amara-reduced-fade 150ms ease-out backwards !important;
