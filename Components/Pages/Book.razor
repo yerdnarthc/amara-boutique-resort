@@ -1,30 +1,72 @@
 @page "/book"
+@implements IDisposable
 @inject BookingState Booking
+@inject NavigationManager Navigation
 <PageTitle>Book a stay - Amara</PageTitle>
 <div class="page-container">
-    <PageIntro Title="Make yourself at home." Description="Review the room, dates, and guests for your stay." />
-    @if (_room is null || _stay is null)
+    @if (_confirmation is not null)
     {
+        <section class="page-intro" aria-labelledby="confirmation-title"><h1 id="confirmation-title" tabindex="-1" @ref="_confirmationTitle">Your stay is confirmed.</h1><p>Keep your reservation reference and review your stay details below.</p></section>
+        <ReservationReceipt Reservation="_confirmation" />
+    }
+    else if (_room is null || _editContext is null)
+    {
+        <PageIntro Title="Make yourself at home." Description="Choose a room and valid dates to begin your stay." />
         <EmptyState Icon="@Icons.Material.Outlined.CalendarMonth" Title="Choose your room first" Description="@_selectionMessage" ActionText="Browse rooms" ActionHref="rooms" />
     }
     else
     {
-        <section class="selected-stay" aria-labelledby="selected-room-title">
-            <img src="@_room.ImagePath" alt="@_room.ImageAlt" width="960" height="640" />
-            <div class="selected-stay-content">
-                <h2 id="selected-room-title">@_room.Name</h2>
-                <p>@_room.Type · @_room.Bed · Up to @_room.Capacity guests</p>
-                <dl class="stay-facts">
-                    <div><dt>Check-in</dt><dd>@_stay.CheckIn.ToString("dd MMM yyyy")</dd></div>
-                    <div><dt>Check-out</dt><dd>@_stay.CheckOut.ToString("dd MMM yyyy")</dd></div>
-                    <div><dt>Guests</dt><dd>@_stay.Guests</dd></div>
-                    <div><dt>Nightly rate</dt><dd>@BookingState.Money(_room.NightlyRate)</dd></div>
-                </dl>
-                <div class="stay-total"><span>@_stay.Nights @(_stay.Nights == 1 ? "night" : "nights") × @BookingState.Money(_room.NightlyRate)</span><strong>@BookingState.Money(_room.NightlyRate * _stay.Nights)</strong></div>
-                <p class="session-note">Your room is selected, but has not been reserved. Reservation submission is not available yet. All rates and rooms are demonstration only.</p>
-                <MudButton Href="rooms" Variant="Variant.Outlined" Color="Color.Default">Choose another room</MudButton>
-            </div>
-        </section>
+        <PageIntro Title="Reserve your stay." Description="Review your dates and enter the lead guest's contact details. All bookings here are demonstration only." />
+        <EditForm EditContext="_editContext" OnSubmit="SubmitReservation" FormName="reservation" class="booking-layout" novalidate @key="_editContext">
+            <DataAnnotationsValidator />
+            <section class="guest-form" aria-labelledby="guest-heading">
+                <h2 id="guest-heading">Guest details</h2>
+                <p class="form-description">Use sample contact details for this demonstration. Fields marked required must be completed.</p>
+                <div class="guest-fields">
+                    <div class="filter-field full-field"><label for="guest-name">Full name (required)</label><InputText id="guest-name" @bind-Value="_form.GuestName" autocomplete="name" maxlength="80" aria-required="true" /><ValidationMessage For="() => _form.GuestName" /></div>
+                    <div class="filter-field"><label for="guest-email">Email (required)</label><InputText id="guest-email" type="email" @bind-Value="_form.Email" autocomplete="email" maxlength="120" aria-required="true" /><ValidationMessage For="() => _form.Email" /></div>
+                    <div class="filter-field"><label for="guest-phone">Phone (required)</label><InputText id="guest-phone" type="tel" @bind-Value="_form.Phone" autocomplete="tel" maxlength="30" aria-required="true" /><ValidationMessage For="() => _form.Phone" /></div>
+                </div>
+                <h2 class="stay-form-heading">Your dates and guests</h2>
+                <div class="guest-fields">
+                    <div class="filter-field"><label for="stay-check-in">Check-in</label><InputDate id="stay-check-in" @bind-Value="_form.CheckIn" min="@TodayIso" /><ValidationMessage For="() => _form.CheckIn" /></div>
+                    <div class="filter-field"><label for="stay-check-out">Check-out</label><InputDate id="stay-check-out" @bind-Value="_form.CheckOut" min="@CheckOutMinimum" /><ValidationMessage For="() => _form.CheckOut" /></div>
+                    <div class="filter-field full-field"><label for="stay-guests">Guests (up to @_room.Capacity)</label><InputNumber id="stay-guests" @bind-Value="_form.Guests" min="1" max="@_room.Capacity" /><ValidationMessage For="() => _form.Guests" /></div>
+                    <div class="filter-field full-field"><label for="special-requests">Special requests (optional)</label><InputTextArea id="special-requests" @bind-Value="_form.SpecialRequests" rows="3" maxlength="500" aria-describedby="request-help" /><ValidationMessage For="() => _form.SpecialRequests" /><small id="request-help">For example, a preferred arrival time. Requests are not guaranteed.</small></div>
+                </div>
+                @if (_submitError is not null)
+                {
+                    <div class="booking-error" role="alert">@_submitError</div>
+                }
+                <div aria-live="polite"><ValidationSummary /></div>
+                <p class="session-note">No payment or email is processed. Reservations are held only in the current session and may reset on refresh or restart.</p>
+                <div class="booking-submit"><MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" Disabled="_isSubmitting">@(_isSubmitting ? "Confirming your stay…" : "Confirm demo reservation")</MudButton><MudButton Href="rooms" Color="Color.Default">Choose another room</MudButton></div>
+            </section>
+            <aside class="booking-summary" aria-labelledby="selected-room-title">
+                <img src="@_room.ImagePath" alt="@_room.ImageAlt" width="960" height="640" />
+                <div class="booking-summary-content">
+                    <h2 id="selected-room-title">@_room.Name</h2>
+                    <p>@_room.Type · @_room.Bed · Up to @_room.Capacity guests</p>
+                    <dl class="stay-facts">
+                        <div><dt>Check-in</dt><dd>@_form.CheckIn.ToString("dd MMM yyyy")</dd></div>
+                        <div><dt>Check-out</dt><dd>@_form.CheckOut.ToString("dd MMM yyyy")</dd></div>
+                        <div><dt>Guests</dt><dd>@_form.Guests</dd></div>
+                        <div><dt>Nightly rate</dt><dd>@BookingState.Money(_room.NightlyRate)</dd></div>
+                    </dl>
+                    <div class="summary-calculation" aria-live="polite">
+                        @if (_form.Nights > 0 && _form.CheckIn >= DateOnly.FromDateTime(DateTime.Today) && _form.Guests >= 1 && _form.Guests <= _room.Capacity)
+                        {
+                            <div class="stay-total"><span>@_form.Nights @(_form.Nights == 1 ? "night" : "nights") × @BookingState.Money(_room.NightlyRate)</span><strong>@BookingState.Money(_room.NightlyRate * _form.Nights)</strong></div>
+                        }
+                        else
+                        {
+                            <p>Choose valid dates and a guest count within this room's capacity to calculate your total.</p>
+                        }
+                    </div>
+                    <p class="session-note">Availability is checked again when you confirm. Your selection does not hold the room.</p>
+                </div>
+            </aside>
+        </EditForm>
     }
 </div>
 
@@ -33,15 +75,35 @@
     [SupplyParameterFromQuery(Name = "checkIn")] public string? CheckIn { get; set; }
     [SupplyParameterFromQuery(Name = "checkOut")] public string? CheckOut { get; set; }
     [SupplyParameterFromQuery(Name = "guests")] public string? Guests { get; set; }
+    [SupplyParameterFromQuery(Name = "reference")] public string? Reference { get; set; }
+    private ElementReference _confirmationTitle;
+    private string? _focusedReference;
     private Room? _room;
-    private RoomSearch? _stay;
-    private string _selectionMessage = "Start with the room collection, choose your dates and guests, then select an available room.";
+    private Reservation? _confirmation;
+    private ReservationForm _form = new();
+    private EditContext? _editContext;
+    private ValidationMessageStore? _businessMessages;
+    private Guid _requestId = Guid.NewGuid();
+    private bool _isSubmitting;
+    private string? _submitError;
+    private string _selectionMessage = string.Empty;
+    private string TodayIso => DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd");
+    private string CheckOutMinimum => (_form.CheckIn < DateOnly.MaxValue ? _form.CheckIn.AddDays(1) : _form.CheckIn).ToString("yyyy-MM-dd");
 
     protected override void OnParametersSet()
     {
+        if (_editContext is not null) _editContext.OnFieldChanged -= ClearBusinessErrors;
+        _editContext = null;
         _room = null;
-        _stay = null;
+        _confirmation = null;
+        _submitError = null;
         _selectionMessage = "Start with the room collection, choose your dates and guests, then select an available room.";
+        if (!string.IsNullOrWhiteSpace(Reference))
+        {
+            _confirmation = Booking.FindReservation(Reference);
+            if (_confirmation is null) _selectionMessage = "This reservation isn't in the current session. A refresh or restart may have cleared it. Browse rooms to create a new demo reservation.";
+            return;
+        }
         if (RoomId is null) return;
         if (!int.TryParse(RoomId, out var id) || Booking.FindRoom(id) is not { } room ||
             !DateOnly.TryParseExact(CheckIn, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var start) ||
@@ -58,6 +120,51 @@
             return;
         }
         _room = room;
-        _stay = new RoomSearch { CheckIn = start, CheckOut = end, Guests = guests };
+        _form = new ReservationForm { CheckIn = start, CheckOut = end, Guests = guests };
+        _requestId = Guid.NewGuid();
+        _editContext = new EditContext(_form);
+        _businessMessages = new ValidationMessageStore(_editContext);
+        _editContext.OnFieldChanged += ClearBusinessErrors;
+    }
+    private void ClearBusinessErrors(object? sender, FieldChangedEventArgs args)
+    {
+        _businessMessages?.Clear();
+        _submitError = null;
+        _editContext?.NotifyValidationStateChanged();
+    }
+    private async Task SubmitReservation(EditContext context)
+    {
+        if (_isSubmitting || _confirmation is not null || _room is null) return;
+        _businessMessages!.Clear();
+        _submitError = null;
+        var valid = context.Validate();
+        if (_form.Guests > _room.Capacity)
+        {
+            _businessMessages.Add(context.Field(nameof(ReservationForm.Guests)), $"This room accommodates up to {_room.Capacity} guests. Choose fewer guests or another room.");
+            context.NotifyValidationStateChanged();
+            valid = false;
+        }
+        if (!valid) return;
+        _isSubmitting = true;
+        try
+        {
+            await Task.Yield();
+            if (Booking.TryReserve(_requestId, _room.Id, _form, out var reservation, out var error))
+                Navigation.NavigateTo($"book?reference={reservation!.Reference}", replace: true);
+            else _submitError = error;
+        }
+        finally { _isSubmitting = false; }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_confirmation is not null && _focusedReference != _confirmation.Reference)
+        {
+            _focusedReference = _confirmation.Reference;
+            await _confirmationTitle.FocusAsync();
+        }
+    }
+    public void Dispose()
+    {
+        if (_editContext is not null) _editContext.OnFieldChanged -= ClearBusinessErrors;
     }
 }

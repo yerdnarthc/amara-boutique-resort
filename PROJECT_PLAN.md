@@ -27,7 +27,7 @@ Keep architecture lightweight. Use mock/in-memory data. Add persistence, authent
 - No Blazor application or .csproj existed when this plan was created.
 - MudBlazor 8.15.0 is installed and configured; Radzen is not used.
 - Increment 1 is implemented: .NET 8 Blazor foundation, responsive shell, and five working routes.
-- Increment 2 is implemented: six demo rooms, filters, price sorting, availability, details dialog, and room selection summary. Next: Increment 3, reservation submission.
+- Increments 1–3 are implemented: foundation, room browsing, guest form, reservation submission, and confirmation. Next: Increment 4, booking management.
 - The lab computer has administrator restrictions; prefer user-accessible tooling and existing installations.
 
 ## Skill references
@@ -164,7 +164,7 @@ Useful components include RoomCard, ExperienceCard, EmptyState, and reservation/
 
 - [x] Increment 1 complete
 - [x] Increment 2 complete
-- [ ] Increment 3 complete
+- [x] Increment 3 complete
 - [ ] Increment 4 complete
 - [ ] Increment 5 complete
 
@@ -209,3 +209,16 @@ See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, a
 - Verification: build zero warnings/errors; Edge checks passed combined filters, sort directions, empty/reset states, invalid dates/guests, date overlaps/adjacent boundaries, dialog Escape/selection, one/two-night totals, URL tampering, refreshed selection, and widths 320/390/760/960/1440. No browser errors.
 - Impeccable review: ship within Increment 2 scope. Static detector advisories include standalone Razor stylesheet-resolution limits and an approved brand border color, documented in the design-system extension.
 - Next: Increment 3 guest form, validation, submission, and confirmation. Integrate real in-memory reservations with the availability calculation; retain sample holds as clearly labeled demo data or replace them consistently.
+### Increment 3 completion
+
+- Branch: feature/amara-reservation-flow.
+- Added ReservationForm with DataAnnotations and cross-field date validation, plus immutable Reservation snapshots.
+- Book a Stay now accepts lead guest name, email, phone, optional requests, editable dates, and guest count. Its summary updates nights and total as valid values change.
+- Submission validates the model and room capacity again in BookingState. Availability checking and insertion use one lock; a per-form submission ID returns the original receipt on repeated events.
+- Confirmed session reservations are included in room availability, alongside the illustrative sample holds. Quoted rates and guest details are copied into the receipt.
+- Confirmation includes reference, guest/contact details, dates, requests, status, nightly rate, and total. Keyboard focus moves to the success heading. No email or payment is processed.
+- Minimal My Bookings links keep confirmations reachable within the same interactive session. Search, richer management, and cancellation remain Increment 4.
+- Full refresh/new session can clear reservations. An unavailable confirmation reference shows a recovery message rather than recreating or pretending to restore a reservation. Guest details are never placed in the URL.
+- Verification: final build zero warnings/errors. Fifteen direct state checks passed validation, snapshot pricing, repeated events, overlaps, adjacent dates, atomic concurrent attempts, and session isolation. Edge checks passed required fields/contact/capacity/date validation, live totals, double-click protection, receipt requests, in-session navigation, room availability updates, recoverable availability rechecks, fresh-session behavior, focus, and widths 320–1440.
+- Impeccable finish review: ship within Increment 3 scope. Only known standalone Razor stylesheet-resolution advisories appeared in the detector.
+- Next: Increment 4 reservation search, details/management, confirmation before cancellation, and releasing cancelled room availability.

@@ -165,3 +165,47 @@ h1:focus { outline: none; }
     .room-card-bottom { flex-direction: column; align-items: flex-start; }
     .stay-facts, .detail-amenities { grid-template-columns: 1fr; }
 }
+
+/* Reservation flow extends the existing native fields and stay facts. */
+.booking-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
+.guest-form h2, .booking-summary h2 { font: 400 1.4rem/1.5 var(--heading); }
+.form-description { font-size: .85rem; color: var(--muted); margin-block: 12px 24px; }
+.guest-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.full-field { grid-column: 1/-1; }
+.stay-form-heading { margin-block: 32px 20px; }
+.filter-field textarea { width: 100%; resize: vertical; min-height: 100px; padding: 10px 12px; border: 1px solid #b0aea5; border-radius: 8px; color: var(--ink); background: var(--paper); font: 400 .82rem/1.5 var(--heading); }
+.filter-field small { font-size: .74rem; color: var(--muted); }
+.booking-summary { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; position: sticky; top: 24px; }
+.booking-summary > img { width: 100%; height: 200px; object-fit: cover; display: block; }
+.booking-summary-content { padding: 24px; }
+.booking-summary-content > p { color: var(--muted); font-size: .82rem; margin-top: 12px; }
+.booking-summary .stay-facts { gap: 16px; }
+.booking-submit, .receipt-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+.booking-error { color: #9b3027; border: 1px solid #9b3027; padding: 16px; border-radius: 8px; margin-top: 24px; font-size: .9rem; }
+.validation-errors { color: #9b3027; font-size: .8rem; margin-top: 20px; padding-left: 20px; }
+.reservation-receipt { border: 1px solid var(--line); border-radius: 12px; padding: 32px; max-width: 820px; }
+.receipt-heading { display: flex; align-items: center; gap: 16px; }
+.receipt-icon { color: #5b6c43; }
+.receipt-heading h2 { font: 400 1.5rem/1.5 var(--heading); }
+.receipt-heading p { font-size: .8rem; color: var(--muted); }
+.receipt-reference { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; border-block: 1px solid var(--line); padding-block: 20px; margin-top: 24px; font: 400 .85rem/1.6 var(--heading); }
+.receipt-reference strong { font-weight: 600; overflow-wrap: anywhere; }
+.receipt-facts dd, .receipt-requests p { overflow-wrap: anywhere; white-space: pre-wrap; }
+.receipt-requests { margin-bottom: 24px; }
+.receipt-requests h3 { font: 400 1rem/1.5 var(--heading); margin-bottom: 8px; }
+.reservation-links { list-style: none; padding: 0; margin: 0; }
+.reservation-links li { display: flex; justify-content: space-between; align-items: center; gap: 20px; border-block-end: 1px solid var(--line); padding-block: 24px; }
+.reservation-links h2 { font: 400 1.2rem/1.5 var(--heading); }
+.reservation-links p { font-size: .8rem; color: var(--muted); margin-top: 8px; overflow-wrap: anywhere; }
+@media (max-width: 960px) {
+    .booking-layout { gap: 24px; grid-template-columns: 1.15fr 1fr; }
+    .guest-fields { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+    .booking-layout { grid-template-columns: 1fr; }
+    .booking-summary { position: static; order: -1; }
+    .booking-summary > img { height: 200px; }
+    .reservation-receipt { padding: 24px; }
+    .receipt-facts { grid-template-columns: 1fr; }
+    .reservation-links li { align-items: flex-start; flex-direction: column; }
+}
