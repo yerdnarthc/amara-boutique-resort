@@ -5,7 +5,7 @@
 web
 
 ## Stack
-User-approved plan: .NET 8 Blazor Web App, Interactive Server, MudBlazor 8.15.0, native C#/Razor and CSS. Preserve the installed SDK. This stage is the application foundation only.
+User-approved plan: .NET 8 Blazor Web App, Interactive Server, MudBlazor 8.15.0, native C#/Razor and CSS. Preserve the installed SDK. Increments 1 and 2 are complete; reservation submission is the next increment.
 
 ## Users
 Travelers exploring a fictional boutique resort and local experiences. The practical exam evaluates frontend functionality and design.
@@ -17,7 +17,7 @@ Let visitors discover rooms and experiences, then create and manage demonstratio
 Timed university lab practical on a Windows computer with administrator restrictions. PROJECT_PLAN.md is the approved scope and incremental workflow; AGENTS.md governs development.
 
 ## Capabilities and Constraints
-This increment supplies navigation, page shells, a responsive layout, and the UI library setup. Subsequent increments add room inventory, filters, reservation validation and management, and tourism itineraries. Use mock data and scoped in-memory state only when needed. No accounts, real payments, database, or external backend. Reservations may reset on full refresh or restart.
+The app supplies navigation, responsive layout, six fictional rooms, date/guest/type/search/availability filters, price sorting, room details, and a selected-stay summary. Subsequent increments add reservation submission and management, and tourism itineraries. Room selection alone does not reserve inventory. Rates use USD. Availability currently includes clearly illustrative date holds. Use mock data and scoped in-memory state only when needed. No accounts, real payments, database, or external backend. Reservations may reset on full refresh or restart.
 
 ## Brand Commitments
 Amara — Stays & Experiences. User requested the local hospitality/tourism skills, Anthropic brand guidelines, and Impeccable. The approved palette and typography are in PROJECT_PLAN.md. Use clear, concrete copy and identify fictional/demo material.
@@ -32,4 +32,4 @@ No real property, commercial inventory, testimonials, ratings, or awards have be
 - Compile after meaningful increments.
 
 ## Open Decisions
-Real property location, production deployment, real inventory, and display currency remain undecided. They are not needed for this foundation increment.
+Real property location, production deployment, and real inventory remain undecided. The demo uses USD for consistent price display.
