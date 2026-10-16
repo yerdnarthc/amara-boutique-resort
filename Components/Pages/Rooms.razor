@@ -24,7 +24,7 @@
         <div aria-live="polite" role="status"><strong>@VisibleRooms.Count @(VisibleRooms.Count == 1 ? "room" : "rooms")</strong><p>@_applied.CheckIn.ToString("dd MMM yyyy") – @_applied.CheckOut.ToString("dd MMM yyyy") · @_applied.Guests @(_applied.Guests == 1 ? "guest" : "guests") · @_applied.Nights @(_applied.Nights == 1 ? "night" : "nights")</p></div>
         <div class="sort-field"><label for="room-sort">Sort by</label><select id="room-sort" @bind="_sort"><option value="recommended">Recommended</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div>
     </div>
-    <p class="inventory-note">Fictional room inventory. Rates are per room in USD; photos are illustrative. Apply filters to update your stay dates and availability.</p>
+    <p class="inventory-note">Rates are per room, per night in USD. Apply filters to update your stay dates and availability.</p>
     @if (VisibleRooms.Count == 0)
     {
         <section class="empty-state"><h2>No rooms match your stay</h2><p>Try fewer guests, a different room type, or new dates. You can also clear the filters to see the full collection.</p><MudButton Color="Color.Primary" Variant="Variant.Filled" DropShadow="false" OnClick="ResetFilters">Clear filters</MudButton></section>

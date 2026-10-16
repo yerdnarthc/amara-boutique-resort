@@ -3,7 +3,7 @@
 
 <PageTitle>Experiences — Amara</PageTitle>
 <div class="page-container experiences-page">
-    <PageIntro Title="Days worth remembering." Description="Explore a little beyond your room. These illustrative cultural, nature, and adventure ideas offer a starting point for your stay." />
+    <PageIntro Title="Days worth remembering." Description="Explore beyond your room with cultural walks, nature outings, and guided adventures." />
     <div class="experience-filters">
         <div class="filter-field"><label for="experience-search">Search experiences</label><input id="experience-search" type="search" @bind="_search" @bind:event="oninput" placeholder="Search a title or activity" /></div>
         <div class="filter-field"><label for="experience-category">Category</label><select id="experience-category" @bind="_category"><option value="">All experiences</option><option value="Culture">Culture</option><option value="Nature">Nature</option><option value="Adventure">Adventure</option></select></div>
@@ -28,7 +28,6 @@
             }
         </div>
     }
-    <p class="inventory-note">These activities are fictional examples for this demonstration. Itineraries and inclusions are illustrative; no activity booking is offered.</p>
 </div>
 
 @code {

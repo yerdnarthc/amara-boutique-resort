@@ -25,15 +25,21 @@ dotnet --version
 
 Increments 1-5: foundation, room browsing, reservations, booking management, experiences, and completed Home. The five routes, responsive navigation, Amara theme, locally hosted fonts/photo, shared page introductions/empty states, and branded error/not-found pages are implemented. Home includes date and guest search, featured rooms, and an Experiences path.
 
-| Route | Screen |
-| --- | --- |
-| / | Home |
-| /rooms | Rooms |
+| Route        | Screen      |
+| ------------ | ----------- |
+| /            | Home        |
+| /rooms       | Rooms       |
 | /experiences | Experiences |
-| /book | Book a Stay |
-| /bookings | My Bookings |
+| /book        | Book a Stay |
+| /bookings    | My Bookings |
 
 Rooms now has six demo inventory units, date/guest/type/amenity filters, price sorting, availability, and a details dialog. Select an available room to review its stay summary. Guest details, live totals, reservation submission, and confirmation are implemented. Search, status filters, details, and cancellation are implemented. Experiences has six illustrative activities with search, category filters, and itinerary dialogs. All resort content is fictional; no real bookings or payments are made.
+
+## Prototype boundaries and next phase
+
+Amara currently uses fictional resort content, illustrative photography and rates, and in-memory room inventory and reservations. Reservations may disappear after a refresh, a new interactive session, or a server restart. The site does not collect payments, send confirmation emails, or book experiences. These implementation limits belong in project documentation; guest-facing pages use resort language while explaining the reservation and payment limits where they affect a booking decision.
+
+The current refinement phase focuses on frontend behavior, accessibility, and visual polish. A later development phase will add a persistent database and the related reservation workflow before this can serve real guests. Real property details, inventory, pricing, and operational policies must also be supplied and verified before production use.
 
 ## Project references
 
@@ -58,6 +64,7 @@ Models contains room inventory and validated search criteria. Services/BookingSt
 Foundation compilation succeeded with zero warnings/errors. Headless Edge checks covered the five routes, a branded HTTP 404 fallback, local font/image loading, mobile menu open/close/navigation, and horizontal overflow at widths 390, 760, 960, 1280, and 1440. Screenshots and isolated browser tooling are under the gitignored .impeccable/ folder.
 
 Impeccable's detector returned no findings for the changed UI, but its static parser could not resolve runtime-served Blazor/MudBlazor stylesheet URLs; this limits that detector's color/custom-property coverage. Browser verification complements that check.
+
 ## Increment 2 walkthrough
 
 1. Open /rooms. All six demo rooms are shown; the default stay overlaps the Garden Room sample hold.
@@ -67,6 +74,7 @@ Impeccable's detector returned no findings for the changed UI, but its static pa
 5. Selecting a room does not reserve it. Complete the guest form and confirm a demo reservation. Avoid a full refresh after confirming: reservation records are stored only in the current interactive session.
 
 Increment 2 verification passed in headless Edge, including invalid date/guest validation, combined filtering, empty/reset states, price ordering, overlap boundaries, dialog dismissal and selection, query validation, one/two-night totals, and responsive widths from 320 to 1440. Final build: zero warnings/errors. Browser evidence is saved under the ignored .impeccable/review/ directory.
+
 ## Increment 3 walkthrough
 
 1. Select an available room on /rooms.
@@ -87,7 +95,6 @@ Final Increment 3 build passed with zero warnings/errors. Direct state checks co
 5. Return to Rooms: the cancelled unit can be selected again unless another confirmed stay or illustrative hold overlaps. A new booking has a new reference; the cancelled entry remains in history.
 
 Final Increment 4 build passed with zero warnings/errors. Fifteen direct state checks covered history/quote preservation, repeat and unknown requests, current cancelled receipt replay, availability restoration, rebooking, independent holds, and concurrent cancellation. Eleven Edge checks covered search/status, details, safe dismissal, confirmed cancellation, feedback/counts, current receipts, and rebooking. Desktop/mobile dialog captures were taken after animations settled. Impeccable review approved the implementation. Records remain session-only; no payment/refund or email is processed.
-
 
 ## Increment 5 walkthrough
 

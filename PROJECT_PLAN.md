@@ -246,3 +246,9 @@ See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, a
 - Responsive CSS stacks the new search, room previews, filters, and experience cards at narrower widths while preserving the established palette, typography, and focus treatment.
 - Verification: `dotnet build --no-restore` succeeded with zero warnings/errors. The local app served Home, Experiences, and a Rooms query with selected dates and guest count. Browser click-through and viewport screenshots were unavailable in this environment, so visual and interactive browser behavior remains to be checked in the lab.
 - The five-screen scope is complete. The booking journey, availability, cancellation, and edge cases were verified during Increments 2-4; run a final browser regression through all five screens before presentation.
+
+### Post-increment refinement direction
+
+- Present the public screens as a resort product. Keep fictional and illustrative context in README.md and project notes instead of repeating it across the interface.
+- Keep concise, accurate notices at booking decision points while reservations remain in memory and no payment or email is processed.
+- Focus the current phase on frontend behavior and visual polish. Plan persistent database-backed reservations and the associated real-world workflow for a later phase, after the main frontend refinements.

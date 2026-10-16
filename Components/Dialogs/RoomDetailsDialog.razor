@@ -12,7 +12,7 @@
         </dl>
         <h3 class="detail-subheading">Included in your room</h3>
         <ul class="detail-amenities">@foreach (var amenity in Room.Amenities) { <li>@amenity</li> }</ul>
-        <p class="session-note">@(Available ? "Available for your selected dates." : "This room is unavailable for your selected dates. Try another room or change your dates.") Illustrative room and photo; demo rates in USD.</p>
+        <p class="session-note">@(Available ? "Available for your selected dates." : "This room is unavailable for your selected dates. Try another room or change your dates.")</p>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Close</MudButton>

@@ -23,11 +23,11 @@
     {
         @if (FilteredReservations.Count == 0)
         {
-            <section class="empty-state"><h2>No reservations match</h2><p>Try another name or reference, or clear the filters to see every reservation in this session.</p><MudButton Color="Color.Primary" Variant="Variant.Filled" DropShadow="false" OnClick="ClearFilters">Show all reservations</MudButton></section>
+            <section class="empty-state"><h2>No reservations match</h2><p>Try another name or reference, or clear the filters to see every reservation.</p><MudButton Color="Color.Primary" Variant="Variant.Filled" DropShadow="false" OnClick="ClearFilters">Show all reservations</MudButton></section>
         }
         else
         {
-            <div class="managed-bookings" aria-label="Session reservations">
+            <div class="managed-bookings" aria-label="Reservations">
                 @foreach (var reservation in FilteredReservations)
                 {
                     <article class="booking-entry" aria-labelledby="booking-@reservation.Reference" data-reference="@reservation.Reference">
@@ -46,7 +46,7 @@
             </div>
         }
     }
-    <p class="session-note">These fictional reservations are held only in the current session and may reset when you refresh or restart. No payments or emails are processed.</p>
+    <p class="session-note">Reservations are available only during this visit and may be lost if you refresh or close the site.</p>
 </div>
 @code {
     private string _search = string.Empty;
@@ -72,7 +72,7 @@
     private async Task ShowDetails(Reservation reservation)
     {
         var current = Booking.FindReservation(reservation.Reference);
-        if (current is null) { _error = "That reservation is no longer in this session."; return; }
+        if (current is null) { _error = "We couldn't find that reservation. It may have been cleared after a refresh or restart."; return; }
         var parameters = new DialogParameters<ReservationDetailsDialog> { { dialog => dialog.Reservation, current } };
         await DialogService.ShowAsync<ReservationDetailsDialog>("Reservation details", parameters,
             new DialogOptions { CloseButton = true, CloseOnEscapeKey = true, FullWidth = true, MaxWidth = MaxWidth.Small });

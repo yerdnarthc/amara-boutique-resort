@@ -20,7 +20,7 @@ Timed university lab practical on a Windows computer with administrator restrict
 The app supplies navigation, responsive layout, six fictional rooms, date/guest/type/search/availability filters, price sorting, room details, and a selected-stay summary. Guest form validation, editable stay details, reservation submission, and confirmation are implemented. Reservation search, status filters, details, and cancellation with confirmation are implemented. Home search carries dates and guests into Rooms; six illustrative experiences can be searched, filtered, and inspected in itinerary dialogs. Room selection alone does not reserve inventory. Rates use USD. Availability includes clearly illustrative date holds and confirmed session reservations. Submission is atomic and duplicate-protected; quoted prices are snapshotted. Receipts and cancelled history are reachable in-session, but can be lost on a full refresh or restart. Cancellation preserves the original details/quote and releases availability; other confirmed reservations and illustrative holds remain effective. No payment or email is processed. Use mock data and scoped in-memory state only when needed. No accounts, real payments, database, or external backend. Reservations may reset on full refresh or restart.
 
 ## Brand Commitments
-Amara — Stays & Experiences. User requested the local hospitality/tourism skills, Anthropic brand guidelines, and Impeccable. The approved palette and typography are in PROJECT_PLAN.md. Use clear, concrete copy and identify fictional/demo material.
+Amara — Stays & Experiences. User requested the local hospitality/tourism skills, Anthropic brand guidelines, and Impeccable. The approved palette and typography are in PROJECT_PLAN.md. Use clear, concrete guest-facing copy. Keep fictional/demo context in project documentation; explain current reservation and payment limits in the booking flow where they affect decisions.
 
 ## Evidence on Hand
 No real property, commercial inventory, testimonials, ratings, or awards have been supplied. Do not fabricate these as real claims. Any sourced photography is illustrative and credited in ASSETS.md.
@@ -32,4 +32,4 @@ No real property, commercial inventory, testimonials, ratings, or awards have be
 - Compile after meaningful increments.
 
 ## Open Decisions
-Real property location, production deployment, and real inventory remain undecided. The demo uses USD for consistent price display.
+Real property location, production deployment, and real inventory remain undecided. The demo uses USD for consistent price display. Finish the main frontend refinements before a later phase adds persistent reservation storage and other services needed for real-world use.
