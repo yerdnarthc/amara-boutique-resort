@@ -1,0 +1,30 @@
+<MudDialog>
+    <DialogContent>
+        <img class="dialog-room-photo" src="@Room.ImagePath" alt="@Room.ImageAlt" width="960" height="640" />
+        <p class="room-detail-description">@Room.Description</p>
+        <dl class="stay-facts">
+            <div><dt>Room type</dt><dd>@Room.Type</dd></div>
+            <div><dt>Guests</dt><dd>Up to @Room.Capacity</dd></div>
+            <div><dt>Beds</dt><dd>@Room.Bed</dd></div>
+            <div><dt>Room size</dt><dd>@Room.Size m²</dd></div>
+            <div><dt>Nightly rate</dt><dd>@BookingState.Money(Room.NightlyRate)</dd></div>
+            <div><dt>Your stay</dt><dd>@Search.Nights @(Search.Nights == 1 ? "night" : "nights")</dd></div>
+        </dl>
+        <h3 class="detail-subheading">Included in your room</h3>
+        <ul class="detail-amenities">@foreach (var amenity in Room.Amenities) { <li>@amenity</li> }</ul>
+        <p class="session-note">@(Available ? "Available for your selected dates." : "This room is unavailable for your selected dates. Try another room or change your dates.") Illustrative room and photo; demo rates in USD.</p>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Close</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" DropShadow="false" Disabled="@(!Available)" OnClick="Select">Select room</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance Dialog { get; set; } = default!;
+    [Parameter, EditorRequired] public Room Room { get; set; } = default!;
+    [Parameter, EditorRequired] public RoomSearch Search { get; set; } = default!;
+    [Parameter] public bool Available { get; set; }
+    private void Cancel() => Dialog.Cancel();
+    private void Select() => Dialog.Close(DialogResult.Ok(Room.Id));
+}

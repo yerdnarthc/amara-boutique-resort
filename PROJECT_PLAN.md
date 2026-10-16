@@ -27,7 +27,7 @@ Keep architecture lightweight. Use mock/in-memory data. Add persistence, authent
 - No Blazor application or .csproj existed when this plan was created.
 - MudBlazor 8.15.0 is installed and configured; Radzen is not used.
 - Increment 1 is implemented: .NET 8 Blazor foundation, responsive shell, and five working routes.
-- The next implementation task is Increment 2: room browsing.
+- Increment 2 is implemented: six demo rooms, filters, price sorting, availability, details dialog, and room selection summary. Next: Increment 3, reservation submission.
 - The lab computer has administrator restrictions; prefer user-accessible tooling and existing installations.
 
 ## Skill references
@@ -107,7 +107,7 @@ Identity, title, category, duration, description, itinerary, inclusions, prepara
 
 Unique reference, selected room identity, guest name/email/contact, check-in/check-out dates, guest count, quoted nightly rate, total, and status (Confirmed or Cancelled).
 
-Use C# decimal for money. Choose and label one display currency consistently during implementation; no currency was fixed during planning.
+Use C# decimal for money. Demo room rates use USD consistently. Prices are illustrative and do not represent a real property.
 
 ## Booking rules
 
@@ -163,7 +163,7 @@ Useful components include RoomCard, ExperienceCard, EmptyState, and reservation/
 | 5. Tourism and polish | Experience catalog, itineraries, completed Home, responsive/empty states | Complete guest journey and experience browsing work across all five screens |
 
 - [x] Increment 1 complete
-- [ ] Increment 2 complete
+- [x] Increment 2 complete
 - [ ] Increment 3 complete
 - [ ] Increment 4 complete
 - [ ] Increment 5 complete
@@ -197,3 +197,15 @@ Verify:
 The full official Impeccable skill is installed at [.agents/skills/impeccable/SKILL.md](.agents/skills/impeccable/SKILL.md). Use it for design, UI/UX, accessibility, responsive behavior, and clear interface copy throughout the increments above. Its quality guidance complements the existing hospitality skills and the selected Anthropic brand identity; preserve this plan's C#/Blazor stack and exam scope.
 
 See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, all included commands, Windows launcher usage, Codex hook activation, verification, and limitations. Before the first UI implementation, initialize its product context from this plan and follow its new-work guidance. PRODUCT.md now records the approved product context; DESIGN.md records the implemented foundation design system.
+
+### Increment 2 completion
+
+- Branch: feature/amara-room-browsing.
+- Added Room/RoomType and RoomSearch models, scoped BookingState inventory, RoomCard, and RoomDetailsDialog.
+- Six individually reservable demo rooms with local illustrative photographs; rates use USD.
+- Filters apply as a validated snapshot: dates, guest capacity, type, name/amenity search, and available-only. Price sorting applies immediately.
+- Sample availability holds: Garden Room from today + 2 to today + 4; Family Deluxe from today + 5 to today + 7. These are illustrative date holds, not customer reservations. Same-day checkout/check-in is allowed.
+- Selecting a room carries its ID, ISO dates, and guest count in the booking URL. The summary revalidates parameters and availability, shows nights/rate/total, and survives refresh. Selecting does not reserve inventory.
+- Verification: build zero warnings/errors; Edge checks passed combined filters, sort directions, empty/reset states, invalid dates/guests, date overlaps/adjacent boundaries, dialog Escape/selection, one/two-night totals, URL tampering, refreshed selection, and widths 320/390/760/960/1440. No browser errors.
+- Impeccable review: ship within Increment 2 scope. Static detector advisories include standalone Razor stylesheet-resolution limits and an approved brand border color, documented in the design-system extension.
+- Next: Increment 3 guest form, validation, submission, and confirmation. Integrate real in-memory reservations with the availability calculation; retain sample holds as clearly labeled demo data or replace them consistently.

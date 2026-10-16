@@ -1,4 +1,4 @@
-﻿---
+---
 name: Amara
 description: Stays and experiences in a warm, restrained resort setting.
 colors:
@@ -11,6 +11,7 @@ colors:
   charcoal: "#141413"
   muted-ink: "#56564e"
   hairline: "#e8e6dc"
+  field-border: "#b0aea5"
   focus-brown: "#6b432b"
   validation-red: "#9b3027"
 typography:
@@ -40,6 +41,9 @@ components:
   empty-state: { backgroundColor: "{colors.paper}", textColor: "{colors.charcoal}", rounded: "{rounded.surface}", padding: "48px 32px" }
   text-link: { textColor: "{colors.charcoal}", typography: "{typography.label}" }
   text-link-hover: { textColor: "{colors.terracotta-ink}" }
+  native-field: { backgroundColor: "{colors.paper}", textColor: "{colors.charcoal}", rounded: "{rounded.control}", padding: "10px 12px" }
+  room-card: { rounded: "{rounded.surface}", padding: "24px" }
+  selected-stay: { rounded: "{rounded.surface}" }
   destination-photo: { rounded: "{rounded.surface}", width: "100%", height: "clamp(360px, 38vw, 540px)" }
 ---
 
@@ -50,7 +54,7 @@ components:
 
 Amara combines warm paper, charcoal type, restrained terracotta actions, and destination photography. The visual direction follows the approved Anthropic palette and Poppins/Lora pairing; it expresses a fictional hospitality brand through generous space and calm editorial composition.
 
-Poppins gives headings and navigation a clear, contemporary voice. Lora makes descriptive copy feel unhurried. Thin rules and shared background tones organize the interface without decorative depth. This document records the implemented foundation, rather than future inventory or booking interfaces.
+Poppins gives headings and navigation a clear, contemporary voice. Lora makes descriptive copy feel unhurried. Thin rules and shared background tones organize the interface without decorative depth. Room browsing and selected-stay review extend this foundation with quiet native fields, photographic cards, and a focused details dialog.
 
 **Key Characteristics:**
 - Warm paper surfaces with charcoal text.
@@ -60,7 +64,7 @@ Poppins gives headings and navigation a clear, contemporary voice. Lora makes de
 - Responsive navigation and visible keyboard focus.
 
 ## Colors
-Primary: Terracotta identifies actions, the wordmark dot, and active navigation; Terracotta Hover belongs to the booking link; Terracotta Ink provides readable accent text. Secondary: Sage is configured in MudBlazor; Sage Ink colors empty-state icons. Neutrals: Paper carries surfaces, Charcoal carries text, Muted Ink carries descriptions, and Hairline separates sections. Focus Brown and Validation Red are functional feedback colors. Approved blue and mid-gray options are not extracted foundation defaults.
+Primary: Terracotta identifies actions, the wordmark dot, and active navigation; Terracotta Hover belongs to the booking link; Terracotta Ink provides readable accent text. Secondary: Sage is configured in MudBlazor; Sage Ink colors empty-state icons and available-room status; Validation Red identifies unavailable rooms and invalid fields. Status text accompanies color. Neutrals: Paper carries surfaces, Charcoal carries text, Muted Ink carries descriptions, and Hairline separates sections. Focus Brown and Validation Red are functional feedback colors. Approved Anthropic mid gray supplies Field Border for native inputs and selects. Blue remains unused.
 
 **The Dark Label Rule.** Terracotta filled actions use charcoal labels, matching the configured primary contrast color.
 
@@ -70,15 +74,15 @@ Poppins with Arial/sans-serif fallbacks serves headings and controls; Lora with 
 **The Two Voice Rule.** Use Poppins for headings and controls, and Lora for descriptive body copy.
 
 ## Layout
-Header/main/footer share `min(1280px, calc(100% - 96px))`; at 960px and below, gutters become 24px per side. Inner page shells cap at 1040px. Minimum viewport width is 320px. Hero and welcome grids use `1.05fr 1fr` and a fluid 32px-80px gap. At 760px and below, grids stack with 28px gaps; main padding changes from 48px/72px to 32px/48px. Header minimum height changes from 112px to 90px; navigation opens vertically in document flow and footer content stacks. Empty-state padding reduces to 32px 20px.
+Header/main/footer share `min(1280px, calc(100% - 96px))`; at 960px and below, gutters become 24px per side. Inner page shells cap at 1040px. Minimum viewport width is 320px. Hero and welcome grids use `1.05fr 1fr` and a fluid 32px-80px gap. At 760px and below, grids stack with 28px gaps; main padding changes from 48px/72px to 32px/48px. Header minimum height changes from 112px to 90px; navigation opens vertically in document flow and footer content stacks. Empty-state padding reduces to 32px 20px. Room cards form two columns with 32px gaps, becoming one column with 24px gaps at 760px. Filters use five columns, two at 960px with search spanning both, and one at 390px. The selected-stay photo/content split is 1fr/1.2fr, stacking at 760px. Stay facts and amenities use two columns, then one at 390px.
 
 ## Elevation & Depth
-Flat paper surfaces, hairlines, and whitespace provide structure. Filled MudBlazor actions explicitly disable drop shadows; photography supplies natural depth. Dialog/popover providers exist but have no implemented visual example. Reduced-motion preference suppresses animation and transition duration; no custom decorative animation is implemented.
+Flat paper surfaces, hairlines, and whitespace provide structure. Filled MudBlazor actions explicitly disable drop shadows; photography supplies natural depth. Room details use the existing MudBlazor dialog surface and backdrop; no custom dialog shadow token is introduced. Reduced-motion preference suppresses animation and transition duration; no custom decorative animation is implemented.
 
 **The Quiet Surface Rule.** Separate foundation sections with spacing and hairlines before introducing elevation.
 
 ## Shapes
-Surface corners are gently rounded; controls use the smaller radius. Borders are single-pixel hairlines. Photos use `object-fit: cover`; preserve meaningful subjects when cropping.
+Surface corners are gently rounded; controls use the smaller radius. Container borders are single-pixel hairlines; fields use the stronger Field Border. Room cards and selected-stay containers use the surface radius; native fields use the control radius. Photos use `object-fit: cover`; preserve meaningful subjects when cropping.
 
 ## Components
 - **Buttons:** MudBlazor primary actions use sentence case, dark labels, and no drop shadow. Hero action is large; empty-state actions use default size. Custom booking navigation uses the frontmatter control token, a 14px icon gap, and its dedicated hover color.
@@ -86,8 +90,12 @@ Surface corners are gently rounded; controls use the smaller radius. Borders are
 - **Empty state:** centered bordered paper container, Sage Ink SVG icon, regular heading, description capped at 54ch, and a primary action.
 - **Text links:** underline offset .25em, optional SVG arrow with 10px gap, Terracotta Ink on hover.
 - **Photography:** local, credited illustrative image with surface radius, fluid desktop height, 380px mobile height, and a muted caption 12px below.
-- **Keyboard focus:** solid 3px Focus Brown outline with 5px offset. Preserve the skip link. No fields, chips, inventory cards, or reservation dialogs are implemented yet.
+- **Keyboard focus:** solid 3px Focus Brown outline with 5px offset. Preserve the skip link. Native input, select, and checkbox controls retain this focus treatment. Chips and reservation-submission dialogs are not implemented.
 
+- **Room filters and fields:** labeled native date, number, search, and select controls use a 46px minimum height, paper background, Field Border, control radius, and Poppins (.82rem/1.5). Labels use .78rem/1.5; invalid borders and inline messages use Validation Red. The availability checkbox is 18px with Terracotta Ink accent. Apply filters commits the form; Reset filters restores defaults. The sort select shares field styling and updates immediately.
+- **Room cards:** clipped surface-radius containers use a 3:2 photo, 24px body padding (20px at 960px), a regular Poppins title (1.45rem/1.4), muted description, and compact amenities. A hairline separates the tabular-number nightly price from Details and filled Select room actions. Unavailable rooms retain Details and disable selection; availability is written in text. Prices use weight 600.
+- **Room details dialog:** full-width MudBlazor dialog capped at Small, titled with the room name. A 240px-high cropped photo precedes description, definition-list facts, amenities, and availability copy. Close, the close icon, and Escape dismiss; Select room is disabled when unavailable.
+- **Selected-stay summary:** bordered photo/content container with 32px content padding (24px on mobile), definition-list dates and guests, and a hairline-separated nightly-rate calculation and total. Mobile photography is 240px high. Keep the explicit selected-but-not-reserved message and Choose another room action.
 ## Do's and Don'ts
 ### Do:
 - **Do** keep warm paper and charcoal as the dominant surface and text pairing.

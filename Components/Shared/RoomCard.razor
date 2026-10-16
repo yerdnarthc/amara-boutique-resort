@@ -1,0 +1,25 @@
+<article class="room-card" aria-labelledby="room-title-@Room.Id" data-room-id="@Room.Id" data-rate="@Room.NightlyRate">
+    <img class="room-photo" src="@Room.ImagePath" alt="@Room.ImageAlt" width="960" height="640" loading="lazy" />
+    <div class="room-card-body">
+        <div class="room-card-meta"><span>@Room.Type · Up to @Room.Capacity guests</span><span class="availability @(Available ? "available" : "unavailable")">@(Available ? "Available" : "Unavailable")</span></div>
+        <h2 id="room-title-@Room.Id">@Room.Name</h2>
+        <p>@Room.Description</p>
+        <ul class="room-amenities" aria-label="Room features">
+            <li>@Room.Bed</li><li>@Room.Size m²</li><li>@Room.Amenities[0]</li>
+        </ul>
+        <div class="room-card-bottom">
+            <div class="room-price"><strong>@BookingState.Money(Room.NightlyRate)</strong><span>per room / night</span></div>
+            <div class="room-card-actions">
+                <MudButton Variant="Variant.Text" OnClick="() => OnDetails.InvokeAsync(Room)" aria-label="@($"View details for {Room.Name}")">Details</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" Disabled="@(!Available)" OnClick="() => OnSelect.InvokeAsync(Room)" aria-label="@($"Select {Room.Name}")">Select room</MudButton>
+            </div>
+        </div>
+    </div>
+</article>
+
+@code {
+    [Parameter, EditorRequired] public Room Room { get; set; } = default!;
+    [Parameter] public bool Available { get; set; }
+    [Parameter] public EventCallback<Room> OnDetails { get; set; }
+    [Parameter] public EventCallback<Room> OnSelect { get; set; }
+}
