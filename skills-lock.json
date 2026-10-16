@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "adventure-tourism-plan": {
+      "source": "winbda/claude-skills-collection",
+      "sourceType": "github",
+      "skillPath": "skills/adventure-tourism-plan/SKILL.md",
+      "computedHash": "ee22096fc3774b0ed056879d654d63d0d3b7557672884bd6832577203925b783"
+    },
+    "adventure-tourism-strategy": {
+      "source": "winbda/claude-skills-collection",
+      "sourceType": "github",
+      "skillPath": "skills/adventure-tourism-strategy/SKILL.md",
+      "computedHash": "e54e7b24b26a4f1bab513891fcd7aef0f914d4a941d5591b030cd0860bfe4493"
+    },
+    "brand-guidelines": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/brand-guidelines/SKILL.md",
+      "computedHash": "c82f0b24cdcc7e2693a963d30c810558b7bb89ed84508b2328228d21256ef865"
+    },
+    "cultural-tourism-guide": {
+      "source": "winbda/claude-skills-collection",
+      "sourceType": "github",
+      "skillPath": "skills/cultural-tourism-guide/SKILL.md",
+      "computedHash": "ecd8d452563051c823f7709b071a4fd046d13cba3711ebed241a6ab6c5ee4e8b"
+    },
+    "hospitality-expert": {
+      "source": "personamanagmentlayer/pcl",
+      "sourceType": "github",
+      "skillPath": "stdlib/domains/hospitality-expert/SKILL.md",
+      "computedHash": "5184f12abd3abdcf582a9fc8a5c7dcbce0b4df2e1e5dfa32e79d6baf44e37200"
+    }
+  }
+}
