@@ -118,3 +118,6 @@ Booking management review evidence: [desktop list](.impeccable/review/bookings4-
 - **Don't** add decorative gradients, heavy shadows, or unnecessary animation to this restrained foundation.
 - **Don't** document unimplemented inputs, cards, or dialogs as established patterns.
 - **Don't** use muted decorative brand colors for low-contrast body text.
+
+## Increment 5 extension
+Home now uses the established flat paper and hairline system for a validated stay search, two photographic room previews, and an Experiences invitation. The search uses the existing native field treatment and carries criteria into Rooms. The Experiences page uses two-column flat cards with one consistent MudBlazor icon per activity, written category/duration, and a text action; its search and category controls share the existing field style. At 760px, cards and Home previews stack; at 390px, experience filters become one column. Itinerary dialogs reuse the established Small MudBlazor dialog and detail heading styles. Activity content is explicitly illustrative, with preparation guidance and no booking action. Browser viewport inspection remains pending in the lab environment.

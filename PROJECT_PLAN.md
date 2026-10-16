@@ -23,11 +23,11 @@ Keep architecture lightweight. Use mock/in-memory data. Add persistence, authent
 
 ## Current environment and status
 
-- Verified SDK: .NET 8.0.400.
+- Verified SDK: .NET 8.0.425 (global.json selects the 8.0.400 feature band with patch roll-forward).
 - No Blazor application or .csproj existed when this plan was created.
 - MudBlazor 8.15.0 is installed and configured; Radzen is not used.
 - Increment 1 is implemented: .NET 8 Blazor foundation, responsive shell, and five working routes.
-- Increments 1-4 are implemented: foundation, room browsing, reservations, and booking management. Next: Increment 5, experiences and final polish.
+- Increments 1-5 are implemented: foundation, room browsing, reservations, booking management, experiences, and completed Home.
 - The lab computer has administrator restrictions; prefer user-accessible tooling and existing installations.
 
 ## Skill references
@@ -166,7 +166,7 @@ Useful components include RoomCard, ExperienceCard, EmptyState, and reservation/
 - [x] Increment 2 complete
 - [x] Increment 3 complete
 - [x] Increment 4 complete
-- [ ] Increment 5 complete
+- [x] Increment 5 complete
 
 Build after each meaningful increment. Inspect and fix compilation errors before adding optional polish. Update this checklist and record material decisions below as implementation progresses.
 
@@ -235,3 +235,14 @@ See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, a
 - Verification: build zero warnings/errors; 15 direct state checks and 11 Edge flow checks passed, including combined search/status, details/dismissal, confirmation, retained history, cancelled receipts, restored availability, and rebooking. No browser errors; widths 320/390/760/960/1440 had no horizontal overflow.
 - Dialog captures were repeated after entrance animations settled: identity transforms, 600px desktop and 326px at a 390px viewport, with 14.4px fact text. Impeccable review: ship, no material fixes.
 - Next: Increment 5, local experience catalog and itineraries, completed Home content, and final responsive/empty-state polish. Persistence remains session-only.
+
+
+### Increment 5 completion
+
+- Branch: feature/amara-experiences-polish.
+- Experiences shows six fictional cultural, nature, and adventure activities. Search updates as typed, combines with category filtering, and provides clear and no-results actions.
+- Each activity opens a details dialog with duration, itinerary, inclusions, and preparation guidance. The page and dialog identify the concepts as illustrative; activity reservations remain outside scope.
+- Home includes a validated date/guest search, featured room previews, and a path into Experiences. Valid search criteria carry into Rooms through query parameters; invalid direct query values retain safe defaults.
+- Responsive CSS stacks the new search, room previews, filters, and experience cards at narrower widths while preserving the established palette, typography, and focus treatment.
+- Verification: `dotnet build --no-restore` succeeded with zero warnings/errors. The local app served Home, Experiences, and a Rooms query with selected dates and guest count. Browser click-through and viewport screenshots were unavailable in this environment, so visual and interactive browser behavior remains to be checked in the lab.
+- The five-screen scope is complete. The booking journey, availability, cancellation, and edge cases were verified during Increments 2-4; run a final browser regression through all five screens before presentation.

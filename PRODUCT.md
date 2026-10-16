@@ -5,7 +5,7 @@
 web
 
 ## Stack
-User-approved plan: .NET 8 Blazor Web App, Interactive Server, MudBlazor 8.15.0, native C#/Razor and CSS. Preserve the installed SDK. Increments 1-4 are complete; experiences and final polish are the next increment.
+User-approved plan: .NET 8 Blazor Web App, Interactive Server, MudBlazor 8.15.0, native C#/Razor and CSS. Preserve the installed SDK. Increments 1-5 are complete.
 
 ## Users
 Travelers exploring a fictional boutique resort and local experiences. The practical exam evaluates frontend functionality and design.
@@ -17,7 +17,7 @@ Let visitors discover rooms and experiences, then create and manage demonstratio
 Timed university lab practical on a Windows computer with administrator restrictions. PROJECT_PLAN.md is the approved scope and incremental workflow; AGENTS.md governs development.
 
 ## Capabilities and Constraints
-The app supplies navigation, responsive layout, six fictional rooms, date/guest/type/search/availability filters, price sorting, room details, and a selected-stay summary. Guest form validation, editable stay details, reservation submission, and confirmation are implemented. Reservation search, status filters, details, and cancellation with confirmation are implemented. The remaining increment adds tourism itineraries and final Home content. Room selection alone does not reserve inventory. Rates use USD. Availability includes clearly illustrative date holds and confirmed session reservations. Submission is atomic and duplicate-protected; quoted prices are snapshotted. Receipts and cancelled history are reachable in-session, but can be lost on a full refresh or restart. Cancellation preserves the original details/quote and releases availability; other confirmed reservations and illustrative holds remain effective. No payment or email is processed. Use mock data and scoped in-memory state only when needed. No accounts, real payments, database, or external backend. Reservations may reset on full refresh or restart.
+The app supplies navigation, responsive layout, six fictional rooms, date/guest/type/search/availability filters, price sorting, room details, and a selected-stay summary. Guest form validation, editable stay details, reservation submission, and confirmation are implemented. Reservation search, status filters, details, and cancellation with confirmation are implemented. Home search carries dates and guests into Rooms; six illustrative experiences can be searched, filtered, and inspected in itinerary dialogs. Room selection alone does not reserve inventory. Rates use USD. Availability includes clearly illustrative date holds and confirmed session reservations. Submission is atomic and duplicate-protected; quoted prices are snapshotted. Receipts and cancelled history are reachable in-session, but can be lost on a full refresh or restart. Cancellation preserves the original details/quote and releases availability; other confirmed reservations and illustrative holds remain effective. No payment or email is processed. Use mock data and scoped in-memory state only when needed. No accounts, real payments, database, or external backend. Reservations may reset on full refresh or restart.
 
 ## Brand Commitments
 Amara — Stays & Experiences. User requested the local hospitality/tourism skills, Anthropic brand guidelines, and Impeccable. The approved palette and typography are in PROJECT_PLAN.md. Use clear, concrete copy and identify fictional/demo material.

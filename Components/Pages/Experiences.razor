@@ -1,6 +1,66 @@
 @page "/experiences"
+@inject IDialogService DialogService
+
 <PageTitle>Experiences — Amara</PageTitle>
-<div class="page-container">
-    <PageIntro Title="Beyond your room." Description="Discover local culture, time in nature, and a little adventure. Each experience will explain the itinerary, duration, inclusions, and what to bring." />
-    <EmptyState Icon="@Icons.Material.Outlined.Explore" Title="Good days are taking shape" Description="The experience collection is being prepared. Return soon for ideas to make more of your stay." ActionText="Explore rooms" ActionHref="rooms" />
+<div class="page-container experiences-page">
+    <PageIntro Title="Days worth remembering." Description="Explore a little beyond your room. These illustrative cultural, nature, and adventure ideas offer a starting point for your stay." />
+    <div class="experience-filters">
+        <div class="filter-field"><label for="experience-search">Search experiences</label><input id="experience-search" type="search" @bind="_search" @bind:event="oninput" placeholder="Search a title or activity" /></div>
+        <div class="filter-field"><label for="experience-category">Category</label><select id="experience-category" @bind="_category"><option value="">All experiences</option><option value="Culture">Culture</option><option value="Nature">Nature</option><option value="Adventure">Adventure</option></select></div>
+        <MudButton ButtonType="ButtonType.Button" OnClick="ClearFilters">Clear filters</MudButton>
+    </div>
+    <div class="experience-results" role="status" aria-live="polite">@VisibleExperiences.Count @(VisibleExperiences.Count == 1 ? "experience" : "experiences") to explore</div>
+    @if (VisibleExperiences.Count == 0)
+    {
+        <section class="empty-state"><h2>No experiences found</h2><p>Try another search or category to see more ideas for your stay.</p><MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="ClearFilters">Show all experiences</MudButton></section>
+    }
+    else
+    {
+        <div class="experience-grid">
+            @foreach (var experience in VisibleExperiences)
+            {
+                <article class="experience-card" aria-labelledby="experience-title-@experience.Id">
+                    <div class="experience-card-top"><MudIcon Icon="@experience.Icon" Size="Size.Large" /><span>@experience.Category · @experience.Duration</span></div>
+                    <h2 id="experience-title-@experience.Id">@experience.Title</h2>
+                    <p>@experience.Description</p>
+                    <MudButton Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward" OnClick="() => ShowDetails(experience)" aria-label="@($"View itinerary for {experience.Title}")">View itinerary</MudButton>
+                </article>
+            }
+        </div>
+    }
+    <p class="inventory-note">These activities are fictional examples for this demonstration. Itineraries and inclusions are illustrative; no activity booking is offered.</p>
 </div>
+
+@code {
+    private string _search = string.Empty;
+    private string _category = string.Empty;
+    private static readonly IReadOnlyList<Experience> Catalog =
+    [
+        new(1, "Market & Makers Walk", ExperienceCategory.Culture, "3 hours", "Browse a local market and learn about everyday craft traditions through an unhurried guided walk.",
+            ["Meet your guide at the starting point.", "Walk through the market and meet local makers.", "Pause for a guided craft demonstration."],
+            ["Guided walk", "Craft demonstration"], "Wear comfortable shoes and bring water. Market activity and meeting points may vary.", Icons.Material.Outlined.Storefront),
+        new(2, "Coastal Nature Trail", ExperienceCategory.Nature, "2 hours", "Follow an easy shoreline route with time to notice plants, birdlife, and changing coastal views.",
+            ["Meet for a short route and safety briefing.", "Walk the coastal path with observation stops.", "Return to the starting point."],
+            ["Trail guide", "Route briefing"], "Wear closed shoes, sun protection, and carry drinking water. The route depends on conditions.", Icons.Material.Outlined.Terrain),
+        new(3, "Sunrise Ridge Hike", ExperienceCategory.Adventure, "4 hours", "Start early for a more active climb and a wide view from the ridge at first light.",
+            ["Meet before dawn for a route and safety briefing.", "Climb at a steady group pace with rest stops.", "Reach the viewpoint, then descend together."],
+            ["Hike guide", "Route briefing"], "A moderate fitness level, sturdy footwear, a light layer, and water are recommended. Weather may change the route.", Icons.Material.Outlined.Hiking),
+        new(4, "Heritage Story Walk", ExperienceCategory.Culture, "2 hours", "Trace the stories of a historic neighborhood through its streets, public spaces, and architecture.",
+            ["Meet your guide and review the route.", "Visit notable public landmarks.", "Finish with time for questions."],
+            ["Walking guide", "Landmark notes"], "Wear comfortable shoes and bring water. Public access can change.", Icons.Material.Outlined.AccountBalance),
+        new(5, "Mangrove Discovery", ExperienceCategory.Nature, "2.5 hours", "Take a gentle guided walk along a wetland edge and look for the life supported by mangroves.",
+            ["Meet for a habitat briefing.", "Walk the marked route with wildlife observation stops.", "Return and share your observations."],
+            ["Nature guide", "Observation notes"], "Bring insect repellent, water, and shoes suitable for damp paths. Wildlife sightings are never guaranteed.", Icons.Material.Outlined.Forest),
+        new(6, "Paddle & Explore", ExperienceCategory.Adventure, "3 hours", "Practice basic paddling before a guided outing on sheltered water.",
+            ["Meet for equipment fitting and a safety briefing.", "Practice strokes in shallow water.", "Paddle a guided route and return to shore."],
+            ["Guide", "Paddle and personal flotation device"], "You should be comfortable in water. Bring a change of clothes; conditions may require a shorter route or cancellation.", Icons.Material.Outlined.Kayaking)
+    ];
+    private List<Experience> VisibleExperiences => Catalog.Where(item =>
+        (string.IsNullOrEmpty(_category) || item.Category.ToString() == _category) &&
+        (string.IsNullOrWhiteSpace(_search) || item.Title.Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase) ||
+         item.Description.Contains(_search.Trim(), StringComparison.OrdinalIgnoreCase))).ToList();
+    private void ClearFilters() { _search = string.Empty; _category = string.Empty; }
+    private async Task ShowDetails(Experience experience) => await DialogService.ShowAsync<ExperienceDetailsDialog>(experience.Title,
+        new DialogParameters<ExperienceDetailsDialog> { { dialog => dialog.Experience, experience } },
+        new DialogOptions { CloseButton = true, CloseOnEscapeKey = true, FullWidth = true, MaxWidth = MaxWidth.Small });
+}

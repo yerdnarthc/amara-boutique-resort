@@ -41,9 +41,26 @@
 </div>
 
 @code {
+    [SupplyParameterFromQuery(Name = "checkIn")] public DateOnly? QueryCheckIn { get; set; }
+    [SupplyParameterFromQuery(Name = "checkOut")] public DateOnly? QueryCheckOut { get; set; }
+    [SupplyParameterFromQuery(Name = "guests")] public int? QueryGuests { get; set; }
     private RoomSearch _filters = new();
     private RoomSearch _applied = new();
     private string _sort = "recommended";
+    protected override void OnParametersSet()
+    {
+        if (QueryCheckIn is { } checkIn && QueryCheckOut is { } checkOut && QueryGuests is { } guests)
+        {
+            var search = new RoomSearch { CheckIn = checkIn, CheckOut = checkOut, Guests = guests };
+            var errors = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            if (System.ComponentModel.DataAnnotations.Validator.TryValidateObject(search,
+                new System.ComponentModel.DataAnnotations.ValidationContext(search), errors, true))
+            {
+                _filters = search;
+                _applied = search.Copy();
+            }
+        }
+    }
     private string TodayIso => DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd");
     private string CheckOutMinimum => (_filters.CheckIn < DateOnly.MaxValue ? _filters.CheckIn.AddDays(1) : _filters.CheckIn).ToString("yyyy-MM-dd");
     private List<Room> VisibleRooms
