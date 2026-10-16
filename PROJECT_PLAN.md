@@ -191,3 +191,9 @@ Verify:
 
 - Initial plan: five-screen resort booking and local experience website, using .NET 8, MudBlazor, mock data, and Anthropic-inspired palette/typography.
 - Current next action: implement Increment 1, the foundation and branded layout.
+
+## Impeccable design guidance
+
+The full official Impeccable skill is installed at [.agents/skills/impeccable/SKILL.md](.agents/skills/impeccable/SKILL.md). Use it for design, UI/UX, accessibility, responsive behavior, and clear interface copy throughout the increments above. Its quality guidance complements the existing hospitality skills and the selected Anthropic brand identity; preserve this plan's C#/Blazor stack and exam scope.
+
+See [IMPECCABLE_SETUP.md](IMPECCABLE_SETUP.md) for the pinned source revision, all included commands, Windows launcher usage, Codex hook activation, verification, and limitations. Before the first UI implementation, initialize its product context from this plan and follow its new-work guidance. Installation alone has not created PRODUCT.md or DESIGN.md.
