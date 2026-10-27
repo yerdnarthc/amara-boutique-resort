@@ -1,6 +1,0 @@
-{
-  "files": ["Components/App.razor"],
-  "insertBefore": "</body>",
-  "commentSyntax": "html",
-  "cspChecked": true
-}

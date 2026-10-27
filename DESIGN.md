@@ -102,9 +102,6 @@ Surface corners are gently rounded; controls use the smaller radius. Container b
 - **Reservation details dialog:** the Small full-width MudBlazor dialog reuses the receipt without a nested border, radius, padding, or receipt navigation. Open receipt navigates to the receipt page; Close details, the close icon, and Escape dismiss.
 - **Cancellation dialog:** identify the room, guest, reference, and stay dates before explaining that cancellation releases dates and preserves history. Keep reservation dismisses; Cancel reservation is a flat Validation Red filled action with a Paper label. Close and Escape dismiss; backdrop clicks do not confirm or dismiss. State plainly that no payment was collected.
 
-Reservation review evidence: [desktop form](.impeccable/review/reservation3-form-desktop.png), [mobile form](.impeccable/review/reservation3-form-mobile.png), [desktop confirmation](.impeccable/review/reservation3-confirmation-desktop.png), [mobile confirmation](.impeccable/review/reservation3-confirmation-mobile.png), and [mobile validation](.impeccable/review/reservation3-errors-mobile.png).
-Booking management review evidence: [desktop list](.impeccable/review/bookings4-desktop.png), [mobile list](.impeccable/review/bookings4-mobile.png), [mobile details](.impeccable/review/bookings4-details-mobile.png), [mobile cancellation](.impeccable/review/bookings4-cancel-mobile.png), and [mobile cancelled receipt](.impeccable/review/bookings4-cancelled-mobile.png).
-
 ## Do's and Don'ts
 ### Do:
 - **Do** keep warm paper and charcoal as the dominant surface and text pairing.
@@ -119,5 +116,6 @@ Booking management review evidence: [desktop list](.impeccable/review/bookings4-
 - **Don't** document unimplemented inputs, cards, or dialogs as established patterns.
 - **Don't** use muted decorative brand colors for low-contrast body text.
 
-## Increment 5 extension
-Home now uses the established flat paper and hairline system for a validated stay search, two photographic room previews, and an Experiences invitation. The selected Home headline is “A good place to stay awhile.” with Sage Ink emphasis. The search uses the existing native field treatment and carries criteria into Rooms. The Experiences page uses two-column flat cards with one consistent MudBlazor icon per activity, written category/duration, and a text action; its search and category controls share the existing field style. At 760px, cards and Home previews stack; at 390px, experience filters become one column. Itinerary dialogs reuse the established Small MudBlazor dialog with a category icon, evenly separated itinerary, inclusions, and preparation sections, and no booking action. Fictional and illustrative context is documented in README.md rather than repeated in guest-facing copy. The Market & Makers Walk dialog was inspected at 1280px and 390px without horizontal overflow; broader browser regression remains pending.
+## Home and experiences
+
+Home uses the flat paper and hairline system for a validated stay search, two photographic room previews, and an Experiences invitation. The headline “A good place to stay awhile.” uses Sage Ink emphasis. Search criteria carry into Rooms. Experiences uses two-column flat cards with a consistent MudBlazor icon per activity, written category and duration, and a text action. Search and category controls share the existing field style. At 760px, cards and Home previews stack; at 390px, experience filters become one column. Itinerary dialogs use the Small MudBlazor dialog with separated itinerary, inclusions, and preparation sections.

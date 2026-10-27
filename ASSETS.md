@@ -6,7 +6,7 @@
 - Source: https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&h=1500&q=85
 - Provider: Unsplash; usage terms: https://unsplash.com/license.
 - Used as illustrative stock photography, not evidence of a real Amara property.
-- Origin is also embedded in the JPEG metadata using Impeccable embed-prompt.
+- Origin is also embedded in the JPEG metadata.
 
 ## Fonts
 

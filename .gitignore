@@ -482,15 +482,3 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-
-# Impeccable private settings, runtime caches, and generated previews
-.impeccable/*
-!.impeccable/config.json
-!.impeccable/design.json
-!.impeccable/surfaces/
-!.impeccable/critique/
-.impeccable/critique/*
-!.impeccable/critique/*.md
-!.impeccable/live/
-.impeccable/live/*
-!.impeccable/live/config.json
