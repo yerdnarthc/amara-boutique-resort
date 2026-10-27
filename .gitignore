@@ -482,3 +482,13 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Local AI agent workflow and planning files
+/AGENTS.md
+/.agents/
+/.codex/
+/.impeccable/
+/IMPECCABLE_SETUP.md
+/PRODUCT.md
+/PROJECT_PLAN.md
+/skills-lock.json
